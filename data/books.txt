@@ -1,0 +1,3 @@
+# Format: title|author|isbn|available
+# Example:
+# Clean Code|Robert C. Martin|9780132350884|true

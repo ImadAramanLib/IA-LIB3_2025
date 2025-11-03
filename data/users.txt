@@ -1,0 +1,3 @@
+# Format: userId|name|email
+# Example:
+# U001|John Doe|john@example.com

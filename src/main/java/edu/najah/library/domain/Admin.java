@@ -6,7 +6,7 @@ import java.util.Objects;
  * Represents an administrator in the library management system.
  * Administrators can log in to manage books and users.
  * 
- * @author Imad Araman
+ * @author Imad Araman, Hamza Abuobaid
  * @version 1.0
  */
 public class Admin {

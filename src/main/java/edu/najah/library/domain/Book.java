@@ -6,7 +6,7 @@ import java.util.Objects;
  * Represents a book in the library management system.
  * Each book has a title, author, ISBN, and availability status.
  * 
- * @author Imad Araman
+ * @author Imad Araman, Hamza Abuobaid
  * @version 1.0
  */
 public class Book {

@@ -16,6 +16,9 @@ import java.util.Objects;
  * - Allow admins to add books (requires login via AuthenticationService)
  * - Search books by title, author (partial matching), and ISBN
  * </p>
+ * 
+ * @author Imad Araman, Hamza Abuobaid
+ * @version 1.0
  */
 public class LibraryService {
 
