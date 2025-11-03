@@ -11,7 +11,7 @@
  *   <li>Fine - represents overdue fines</li>
  * </ul>
  * 
- * @author Imad Araman
+ * @author Imad Araman, Hamza Abuobaid
  * @version 1.0
  */
 package edu.najah.library.domain;
