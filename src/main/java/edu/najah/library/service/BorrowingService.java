@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * Service for managing book borrowing, returns, and fine payments.
  * Handles loan creation, returns, and fine payment processing.
  * 
- * @author Imad Araman
+ * @author Imad Araman, Hamza Abuobaid
  * @version 1.0
  */
 public class BorrowingService {

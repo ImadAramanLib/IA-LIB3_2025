@@ -6,7 +6,7 @@ import java.util.Objects;
  * Represents a library user/patron.
  * Each user has a unique ID, name, and email.
  * 
- * @author Imad Araman
+ * @author Imad Araman, Hamza Abuobaid
  * @version 1.0
  */
 public class User {

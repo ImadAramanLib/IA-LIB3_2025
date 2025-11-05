@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  * Service for detecting overdue loans and calculating fines.
  * Identifies loans that exceed the 28-day borrowing period.
  * 
- * @author Imad Araman
+ * @author Imad Araman, Hamza Abuobaid
  * @version 1.0
  */
 public class OverdueDetectionService {
