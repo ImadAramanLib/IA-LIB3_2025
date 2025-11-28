@@ -11,7 +11,7 @@ import java.util.Map;
  * <p>US1.1: Admin can login with valid credentials
  * <p>US1.2: Admin can logout and session is closed securely
  * 
- * @author Imad Araman, Hamza Abuobaid
+ * @author Imad Araman
  * @version 1.0
  */
 public class AuthenticationService {

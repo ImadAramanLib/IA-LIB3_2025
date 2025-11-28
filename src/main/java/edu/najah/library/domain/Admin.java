@@ -1,18 +1,31 @@
 package edu.najah.library.domain;
 
 import java.util.Objects;
+import jakarta.persistence.*;
 
 /**
  * Represents an administrator in the library management system.
  * Administrators can log in to manage books and users.
  * 
- * @author Imad Araman, Hamza Abuobaid
+ * @author Imad Araman
  * @version 1.0
  */
+@Entity
+@Table(name = "admins")
 public class Admin {
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(unique = true, nullable = false)
     private String username;
+    
+    @Column(nullable = false)
     private String password;
+    
+    @Column
+    private String email;
     
     /**
      * Default constructor.
@@ -29,6 +42,24 @@ public class Admin {
     public Admin(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+    
+    /**
+     * Gets the administrator's ID.
+     * 
+     * @return the id
+     */
+    public Long getId() {
+        return id;
+    }
+    
+    /**
+     * Sets the administrator's ID.
+     * 
+     * @param id the id to set
+     */
+    public void setId(Long id) {
+        this.id = id;
     }
     
     /**
@@ -65,6 +96,24 @@ public class Admin {
      */
     public void setPassword(String password) {
         this.password = password;
+    }
+    
+    /**
+     * Gets the administrator's email.
+     * 
+     * @return the email
+     */
+    public String getEmail() {
+        return email;
+    }
+    
+    /**
+     * Sets the administrator's email.
+     * 
+     * @param email the email to set
+     */
+    public void setEmail(String email) {
+        this.email = email;
     }
     
     /**

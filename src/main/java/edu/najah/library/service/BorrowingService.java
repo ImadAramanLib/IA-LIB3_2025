@@ -14,13 +14,16 @@ import java.util.stream.Collectors;
  * Service for managing book borrowing, returns, and fine payments.
  * Handles loan creation, returns, and fine payment processing.
  * 
- * @author Imad Araman, Hamza Abuobaid
+ * <p>US4.1: Enforces borrow restrictions for users with overdue books or unpaid fines.
+ * 
+ * @author Imad Araman
  * @version 1.0
  */
 public class BorrowingService {
     
     private List<Loan> loans;
     private List<Fine> fines;
+    private OverdueDetectionService overdueDetectionService;
     
     /**
      * Default constructor initializing empty collections.
@@ -28,6 +31,18 @@ public class BorrowingService {
     public BorrowingService() {
         this.loans = new ArrayList<>();
         this.fines = new ArrayList<>();
+        this.overdueDetectionService = new OverdueDetectionService(this);
+    }
+    
+    /**
+     * Constructs a BorrowingService with a custom OverdueDetectionService.
+     * 
+     * @param overdueDetectionService the service to use for overdue detection
+     */
+    public BorrowingService(OverdueDetectionService overdueDetectionService) {
+        this.loans = new ArrayList<>();
+        this.fines = new ArrayList<>();
+        this.overdueDetectionService = overdueDetectionService;
     }
     
     /**
@@ -44,7 +59,14 @@ public class BorrowingService {
     
     /**
      * Borrows a book for a user on a specific date.
-     * Book must be available and user must not have unpaid fines.
+     * Book must be available and user must not have unpaid fines or overdue books.
+     * 
+     * <p>Acceptance Criteria (US4.1):
+     * <ul>
+     *   <li>System blocks borrow if user has overdue books</li>
+     *   <li>System blocks borrow if user has unpaid fines</li>
+     *   <li>System blocks with proper error message</li>
+     * </ul>
      * 
      * @param user the user borrowing the book
      * @param book the book to borrow
@@ -58,6 +80,11 @@ public class BorrowingService {
         
         // Check if book is available
         if (!book.isAvailable()) {
+            return null;
+        }
+        
+        // Check if user has overdue books
+        if (hasOverdueBooks(user, borrowDate)) {
             return null;
         }
         
@@ -177,17 +204,42 @@ public class BorrowingService {
     }
     
     /**
-     * Checks if a user can borrow (has no unpaid fines).
+     * Checks if a user can borrow (has no unpaid fines and no overdue books).
      * 
      * @param user the user
-     * @return true if user can borrow, false if has unpaid fines
+     * @return true if user can borrow, false if has unpaid fines or overdue books
      */
     public boolean canBorrow(User user) {
         if (user == null) {
             return false;
         }
         
-        return !hasUnpaidFines(user);
+        return !hasUnpaidFines(user) && !hasOverdueBooks(user);
+    }
+    
+    /**
+     * Checks if a user has overdue books as of today.
+     * 
+     * @param user the user
+     * @return true if user has overdue books, false otherwise
+     */
+    public boolean hasOverdueBooks(User user) {
+        return hasOverdueBooks(user, LocalDate.now());
+    }
+    
+    /**
+     * Checks if a user has overdue books as of a given date.
+     * 
+     * @param user the user
+     * @param currentDate the date to check against
+     * @return true if user has overdue books, false otherwise
+     */
+    public boolean hasOverdueBooks(User user, LocalDate currentDate) {
+        if (user == null || overdueDetectionService == null) {
+            return false;
+        }
+        
+        return overdueDetectionService.getOverdueLoansForUser(user, currentDate).size() > 0;
     }
     
     /**

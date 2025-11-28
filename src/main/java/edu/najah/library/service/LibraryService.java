@@ -17,7 +17,7 @@ import java.util.Objects;
  * - Search books by title, author (partial matching), and ISBN
  * </p>
  * 
- * @author Imad Araman, Hamza Abuobaid
+ * @author Imad Araman
  * @version 1.0
  */
 public class LibraryService {
@@ -127,5 +127,25 @@ public class LibraryService {
      */
     public List<Book> getAllBooks() {
         return new ArrayList<>(bookList);
+    }
+    
+    /**
+     * Adds a book directly to the list without authentication check.
+     * Used for loading books from database on startup.
+     * 
+     * @param book the book to add
+     * @return true if added, false if duplicate
+     */
+    public boolean addBookDirectly(Book book) {
+        if (book == null || book.getIsbn() == null || book.getIsbn().isBlank()) {
+            return false;
+        }
+        boolean duplicate = bookList.stream()
+                .anyMatch(b -> book.getIsbn().equals(b.getIsbn()));
+        if (duplicate) {
+            return false;
+        }
+        bookList.add(book);
+        return true;
     }
 }

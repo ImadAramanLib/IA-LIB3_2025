@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="3.0"
+             xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence
+                                 https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
+    <persistence-unit name="NeonLibraryPU" transaction-type="RESOURCE_LOCAL">
+        
+        <!-- Add your entity classes here -->
+        <class>edu.najah.library.domain.Admin</class>
+        <class>edu.najah.library.domain.User</class>
+        <class>edu.najah.library.domain.Book</class>
+        <class>edu.najah.library.domain.Loan</class>
+        <class>edu.najah.library.domain.Fine</class>
+        
+        <properties>
+            <!-- PostgreSQL JDBC Connection Properties (overridden by DatabaseConfig) -->
+            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver" />
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://ep-red-sun-agapswm0-pooler.c-2.eu-central-1.aws.neon.tech:5432/neondb?sslmode=require" />
+            <property name="jakarta.persistence.jdbc.user" value="neondb_owner" />
+            <property name="jakarta.persistence.jdbc.password" value="placeholder" />
+            
+            <!-- Hibernate Configuration -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
+            <property name="hibernate.hbm2ddl.auto" value="update" />
+            <property name="hibernate.show_sql" value="false" />
+            <property name="hibernate.format_sql" value="false" />
+            
+            <!-- HikariCP Connection Pool Configuration -->
+            <property name="hibernate.hikari.minimumIdle" value="2" />
+            <property name="hibernate.hikari.maximumPoolSize" value="5" />
+            <property name="hibernate.hikari.idleTimeout" value="300000" />
+            <property name="hibernate.hikari.connectionTimeout" value="20000" />
+            <property name="hibernate.hikari.maxLifetime" value="1200000" />
+        </properties>
+    </persistence-unit>
+</persistence>

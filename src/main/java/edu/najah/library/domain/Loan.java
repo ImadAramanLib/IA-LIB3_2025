@@ -7,7 +7,7 @@ import java.util.Objects;
  * Represents a book loan/borrowing record.
  * Tracks when a book was borrowed, when it's due, and when it was returned.
  * 
- * @author Imad Araman, Hamza Abuobaid
+ * @author Imad Araman
  * @version 1.0
  */
 public class Loan {

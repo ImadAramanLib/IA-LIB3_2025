@@ -1,22 +1,44 @@
 package edu.najah.library.domain;
 
+import jakarta.persistence.*;
 import java.util.Objects;
 
 /**
  * Represents a library user/patron.
  * Each user has a unique ID, name, and email.
  * 
- * @author Imad Araman, Hamza Abuobaid
+ * <p>This entity is mapped to the "users" table in the database.</p>
+ * 
+ * @author Imad Araman
  * @version 1.0
  */
+@Entity
+@Table(name = "users", uniqueConstraints = {
+    @UniqueConstraint(columnNames = "userId")
+})
 public class User {
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(name = "user_id", nullable = false, unique = true, length = 50)
     private String userId;
+    
+    @Column(name = "name", nullable = false, length = 255)
     private String name;
+    
+    @Column(name = "email", nullable = false, length = 255)
     private String email;
     
+    @Column(name = "username", unique = true, length = 50)
+    private String username;
+    
+    @Column(name = "password", length = 255)
+    private String password;
+    
     /**
-     * Default constructor.
+     * Default constructor required by JPA.
      */
     public User() {
     }
@@ -32,6 +54,41 @@ public class User {
         this.userId = userId;
         this.name = name;
         this.email = email;
+    }
+    
+    /**
+     * Constructs a User with specified details including username and password.
+     * 
+     * @param userId the user's unique identifier
+     * @param username the user's username for login
+     * @param password the user's password
+     * @param name the user's name
+     * @param email the user's email
+     */
+    public User(String userId, String username, String password, String name, String email) {
+        this.userId = userId;
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.email = email;
+    }
+    
+    /**
+     * Gets the user's database ID.
+     * 
+     * @return the database ID
+     */
+    public Long getId() {
+        return id;
+    }
+    
+    /**
+     * Sets the user's database ID.
+     * 
+     * @param id the database ID to set
+     */
+    public void setId(Long id) {
+        this.id = id;
     }
     
     /**
@@ -86,6 +143,42 @@ public class User {
      */
     public void setEmail(String email) {
         this.email = email;
+    }
+    
+    /**
+     * Gets the user's username.
+     * 
+     * @return the username
+     */
+    public String getUsername() {
+        return username;
+    }
+    
+    /**
+     * Sets the user's username.
+     * 
+     * @param username the username to set
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
+    /**
+     * Gets the user's password.
+     * 
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+    
+    /**
+     * Sets the user's password.
+     * 
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
     }
     
     /**

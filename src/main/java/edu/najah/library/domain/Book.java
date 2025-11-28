@@ -1,26 +1,63 @@
 package edu.najah.library.domain;
 
+import jakarta.persistence.*;
 import java.util.Objects;
 
 /**
  * Represents a book in the library management system.
  * Each book has a title, author, ISBN, and availability status.
  * 
- * @author Imad Araman, Hamza Abuobaid
+ * <p>This entity is mapped to the "books" table in the database.</p>
+ * 
+ * @author Imad Araman
  * @version 1.0
  */
+@Entity
+@Table(name = "books", uniqueConstraints = {
+    @UniqueConstraint(columnNames = "isbn")
+})
 public class Book {
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+    
+    @Column(name = "title", nullable = false, length = 255)
     private String title;
+    
+    @Column(name = "author", nullable = false, length = 255)
     private String author;
+    
+    @Column(name = "isbn", nullable = false, unique = true, length = 50)
     private String isbn;
+    
+    @Column(name = "is_available", nullable = false)
     private boolean isAvailable;
     
     /**
-     * Default constructor.
+     * Default constructor required by JPA.
      */
     public Book() {
         this.isAvailable = true; // New books are available by default
+    }
+    
+    /**
+     * Gets the book's database ID.
+     * 
+     * @return the book ID
+     */
+    public Long getId() {
+        return id;
+    }
+    
+    /**
+     * Sets the book's database ID.
+     * 
+     * @param id the ID to set
+     */
+    public void setId(Long id) {
+        this.id = id;
     }
     
     /**

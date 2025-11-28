@@ -9,7 +9,7 @@
  *   <li>AuthenticationService - handles admin login/logout</li>
  * </ul>
  * 
- * @author Imad Araman, Hamza Abuobaid
+ * @author Imad Araman
  * @version 1.0
  */
 package edu.najah.library.service;

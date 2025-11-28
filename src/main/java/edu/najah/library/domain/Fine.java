@@ -7,7 +7,7 @@ import java.util.Objects;
  * Represents an overdue fine for a user.
  * Tracks the fine amount, payment status, and creation date.
  * 
- * @author Imad Araman, Hamza Abuobaid
+ * @author Imad Araman
  * @version 1.0
  */
 public class Fine {
