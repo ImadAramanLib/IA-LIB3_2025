@@ -20,7 +20,7 @@
         <junit.version>5.10.0</junit.version>
         <mockito.version>5.5.0</mockito.version>
         <sonar.organization>imadaramanlib</sonar.organization>
-        <sonar.projectKey>imadaramanlib_IA-LIB3_2025</sonar.projectKey>
+        <sonar.projectKey>imadaramanlib_ia-lib3_2025</sonar.projectKey>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
     </properties>
