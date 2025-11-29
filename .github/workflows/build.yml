@@ -39,7 +39,19 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
 
       - name: Run tests with coverage
-        run: mvn --batch-mode clean verify
+        run: mvn --batch-mode clean test
+
+      - name: Verify JaCoCo report exists
+        run: |
+          if [ ! -f target/site/jacoco/jacoco.xml ]; then
+            echo "ERROR: JaCoCo XML report not found!"
+            ls -la target/site/jacoco/ || echo "Directory doesn't exist"
+            exit 1
+          else
+            echo "✅ JaCoCo XML report found at target/site/jacoco/jacoco.xml"
+            ls -lh target/site/jacoco/jacoco.xml
+            echo "Report size: $(wc -l < target/site/jacoco/jacoco.xml) lines"
+          fi
 
       - name: SonarCloud Scan
         continue-on-error: true
