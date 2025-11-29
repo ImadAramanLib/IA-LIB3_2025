@@ -80,39 +80,15 @@ public class BorrowingService {
             return null;
         }
         
-        // Check if book is available
         if (!book.isAvailable()) {
             return null;
         }
         
-        // Check if user has unpaid fines
-        if (hasUnpaidFines(user)) {
-            throw new IllegalStateException("Cannot borrow books: user has unpaid fines.");
-        }
-        
-        // Check if user has overdue books
-        if (hasOverdueBooks(user, borrowDate)) {
-            throw new IllegalStateException("Cannot borrow books: user has overdue books.");
-        }
-        
-        // Additional check - should not be needed after above checks
-        if (!canBorrow(user, borrowDate)) {
-            if (hasUnpaidFines(user)) {
-                throw new IllegalStateException("Cannot borrow books: user has unpaid fines.");
-            }
-            if (hasOverdueBooks(user, borrowDate)) {
-                throw new IllegalStateException("Cannot borrow books: user has overdue books.");
-            }
-            return null;
-        }
+        validateBorrowRequest(user, borrowDate, "books");
         
         // Create loan
         Loan loan = new Loan(book, user, borrowDate);
-        
-        // Mark book as unavailable
         book.setAvailable(false);
-        
-        // Add to loans list
         loans.add(loan);
         
         return loan;
@@ -152,26 +128,7 @@ public class BorrowingService {
             return null;
         }
         
-        // Check if user has unpaid fines
-        if (hasUnpaidFines(user)) {
-            throw new IllegalStateException("Cannot borrow items: user has unpaid fines.");
-        }
-        
-        // Check if user has overdue books
-        if (hasOverdueBooks(user, borrowDate)) {
-            throw new IllegalStateException("Cannot borrow items: user has overdue books.");
-        }
-        
-        // Additional check
-        if (!canBorrow(user, borrowDate)) {
-            if (hasUnpaidFines(user)) {
-                throw new IllegalStateException("Cannot borrow items: user has unpaid fines.");
-            }
-            if (hasOverdueBooks(user, borrowDate)) {
-                throw new IllegalStateException("Cannot borrow items: user has overdue books.");
-            }
-            return null;
-        }
+        validateBorrowRequest(user, borrowDate, "items");
         
         Loan loan = new Loan(cd, user, borrowDate);
         cd.setAvailable(false);
@@ -433,5 +390,24 @@ public class BorrowingService {
      */
     public List<Fine> getFines() {
         return new ArrayList<>(fines);
+    }
+    
+    /**
+     * Validates a borrow request by checking user eligibility.
+     * Throws IllegalStateException if user has unpaid fines or overdue books.
+     * 
+     * @param user the user requesting to borrow (must not be null)
+     * @param borrowDate the date of borrowing (must not be null)
+     * @param itemType the type of item being borrowed (for error messages: "books" or "items")
+     * @throws IllegalStateException if user has unpaid fines or overdue books
+     */
+    private void validateBorrowRequest(User user, LocalDate borrowDate, String itemType) {
+        if (hasUnpaidFines(user)) {
+            throw new IllegalStateException("Cannot borrow " + itemType + ": user has unpaid fines.");
+        }
+        
+        if (hasOverdueBooks(user, borrowDate)) {
+            throw new IllegalStateException("Cannot borrow " + itemType + ": user has overdue books.");
+        }
     }
 }

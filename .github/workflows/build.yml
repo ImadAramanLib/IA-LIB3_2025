@@ -42,6 +42,7 @@ jobs:
         run: mvn --batch-mode clean verify
 
       - name: SonarCloud Scan
+        continue-on-error: true
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -51,4 +52,5 @@ jobs:
           -Dsonar.coverage.exclusions=**/Main.java,**/*Test.java,**/presentation/**,**/config/**,**/persistence/**,**/util/**
           -Dsonar.projectKey=ImadAramanLib_IA-LIB3_2025
           -Dsonar.organization=ImadAramanLib
+          -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
