@@ -62,8 +62,6 @@ jobs:
           mvn -B
           org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
           -Dsonar.coverage.exclusions=**/Main.java,**/*Test.java,**/presentation/**,**/config/**,**/persistence/**,**/util/**
-          -Dsonar.projectKey=imadaramanlib_ia-lib3_2025
           -Dsonar.organization=imadaramanlib
-          -Dsonar.projectName=IA-LIB3_2025
           -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
