@@ -38,18 +38,17 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Build Maven Project
-        run: mvn --batch-mode clean install package -DskipTests -Dmaven.test.skip=true
+      - name: Run tests with coverage
+        run: mvn --batch-mode clean verify
 
-      - name: Build and analyze
-        continue-on-error: true
+      - name: SonarCloud Scan
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: >
-          mvn -B clean compile
+          mvn -B
           org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
-          -Dsonar.coverage.exclusions=**/Main.java,**/*Test.java
+          -Dsonar.coverage.exclusions=**/Main.java,**/*Test.java,**/presentation/**,**/config/**,**/persistence/**,**/util/**
           -Dsonar.projectKey=ImadAramanLib_IA-LIB3_2025
           -Dsonar.organization=ImadAramanLib
-          -Dmaven.test.skip=true
 

@@ -3,6 +3,7 @@ package edu.najah.library.service;
 import edu.najah.library.domain.Book;
 import edu.najah.library.domain.Loan;
 import edu.najah.library.domain.User;
+import edu.najah.library.util.MockEmailServer;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,11 +35,23 @@ public class NotificationServiceTest {
     
     @BeforeEach
     public void setUp() {
-        emailServer = new MockEmailServer(true);
+        emailServer = new MockEmailServer();
         borrowingService = new BorrowingService();
         overdueDetectionService = new OverdueDetectionService(borrowingService);
-        EmailNotifier emailNotifier = new EmailNotifier(emailServer, "Overdue Book Reminder");
-        notificationService = new NotificationService(overdueDetectionService, emailNotifier);
+        // Wrap MockEmailServer as an Observer
+        Observer emailObserver = new Observer() {
+            @Override
+            public boolean notify(User user, String message) {
+                emailServer.notify(user, message);
+                return true;
+            }
+            
+            @Override
+            public String getObserverType() {
+                return "Email";
+            }
+        };
+        notificationService = new NotificationService(overdueDetectionService, emailObserver);
         
         user = new User("U001", "John Doe", "john@example.com");
         book = new Book("Test Book", "Test Author", "ISBN123");
@@ -55,14 +68,13 @@ public class NotificationServiceTest {
         boolean result = notificationService.sendReminderToUser(user, currentDate);
         
         assertTrue(result);
-        assertEquals(1, emailServer.getSentEmailCount());
+        assertEquals(1, emailServer.getMessageCount());
         
-        List<MockEmailServer.EmailRecord> emails = emailServer.getSentEmails();
-        MockEmailServer.EmailRecord email = emails.get(0);
+        List<MockEmailServer.EmailMessage> emails = emailServer.getSentMessages();
+        MockEmailServer.EmailMessage email = emails.get(0);
         
-        assertEquals("john@example.com", email.getTo());
-        assertNotNull(email.getSubject());
-        assertEquals("You have 1 overdue book.", email.getMessage());
+        assertEquals("john@example.com", email.user.getEmail());
+        assertEquals("You have 1 overdue book.", email.message);
     }
     
     @Test
@@ -82,8 +94,8 @@ public class NotificationServiceTest {
         boolean result = notificationService.sendReminderToUser(user, currentDate);
         
         assertTrue(result);
-        MockEmailServer.EmailRecord email = emailServer.getSentEmails().get(0);
-        assertEquals("You have 3 overdue book(s).", email.getMessage());
+        MockEmailServer.EmailMessage email = emailServer.getSentMessages().get(0);
+        assertEquals("You have 3 overdue book(s).", email.message);
     }
     
     @Test
@@ -101,7 +113,7 @@ public class NotificationServiceTest {
         int emailsSent = notificationService.sendOverdueReminders(currentDate);
         
         assertEquals(2, emailsSent);
-        assertEquals(2, emailServer.getSentEmailCount());
+        assertEquals(2, emailServer.getMessageCount());
     }
     
     @Test
@@ -114,7 +126,7 @@ public class NotificationServiceTest {
         boolean result = notificationService.sendReminderToUser(user, currentDate);
         
         assertFalse(result);
-        assertEquals(0, emailServer.getSentEmailCount());
+        assertEquals(0, emailServer.getMessageCount());
     }
     
     @Test
@@ -125,7 +137,7 @@ public class NotificationServiceTest {
         boolean result = notificationService.sendReminderToUser(null, currentDate);
         
         assertFalse(result);
-        assertEquals(0, emailServer.getSentEmailCount());
+        assertEquals(0, emailServer.getMessageCount());
     }
     
     @Test
@@ -138,7 +150,7 @@ public class NotificationServiceTest {
         boolean result = notificationService.sendReminderToUser(userNoEmail, currentDate);
         
         assertFalse(result);
-        assertEquals(0, emailServer.getSentEmailCount());
+        assertEquals(0, emailServer.getMessageCount());
     }
     
     @Test
@@ -151,7 +163,7 @@ public class NotificationServiceTest {
         int emailsSent = notificationService.sendOverdueReminders(currentDate);
         
         assertEquals(0, emailsSent);
-        assertEquals(0, emailServer.getSentEmailCount());
+        assertEquals(0, emailServer.getMessageCount());
     }
     
     @Test
@@ -182,10 +194,10 @@ public class NotificationServiceTest {
         
         // Should only send one email per user, not one per loan
         assertEquals(1, emailsSent);
-        assertEquals(1, emailServer.getSentEmailCount());
+        assertEquals(1, emailServer.getMessageCount());
         
-        MockEmailServer.EmailRecord email = emailServer.getSentEmails().get(0);
-        assertEquals("You have 3 overdue book(s).", email.getMessage());
+        MockEmailServer.EmailMessage email = emailServer.getSentMessages().get(0);
+        assertEquals("You have 3 overdue book(s).", email.message);
     }
     
     @Test
@@ -193,9 +205,20 @@ public class NotificationServiceTest {
     public void testConstructorThrowsExceptionForNullDependencies() {
         assertThrows(IllegalArgumentException.class, 
             () -> new NotificationService(null));
-        EmailNotifier emailNotifier = new EmailNotifier(emailServer);
+        Observer emailObserver = new Observer() {
+            @Override
+            public boolean notify(User user, String message) {
+                emailServer.notify(user, message);
+                return true;
+            }
+            
+            @Override
+            public String getObserverType() {
+                return "Email";
+            }
+        };
         assertThrows(IllegalArgumentException.class, 
-            () -> new NotificationService(null, emailNotifier));
+            () -> new NotificationService(null, emailObserver));
     }
 }
 

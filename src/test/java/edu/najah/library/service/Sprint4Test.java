@@ -68,9 +68,9 @@ public class Sprint4Test {
         Fine fine = new Fine(user1, 10.0, LocalDate.now());
         borrowingService.addFine(fine);
         
-        // User should not be able to borrow
-        Loan loan = borrowingService.borrowBook(user1, book1);
-        assertNull(loan);
+        // User should not be able to borrow - should throw exception
+        assertThrows(IllegalStateException.class, 
+            () -> borrowingService.borrowBook(user1, book1));
         assertFalse(borrowingService.canBorrow(user1));
     }
     
@@ -86,9 +86,9 @@ public class Sprint4Test {
         Loan loan2 = borrowingService.borrowBook(user2, book2, day30);
         assertNotNull(loan2); // user2 has no overdue
         
-        // user1 cannot borrow because they have overdue books
-        Loan loan3 = borrowingService.borrowBook(user1, book3, day30);
-        assertNull(loan3);
+        // user1 cannot borrow because they have overdue books - should throw exception
+        assertThrows(IllegalStateException.class,
+            () -> borrowingService.borrowBook(user1, book3, day30));
         assertFalse(borrowingService.canBorrow(user1));
     }
     
@@ -98,9 +98,9 @@ public class Sprint4Test {
         Fine fine = new Fine(user1, 10.0, LocalDate.now());
         borrowingService.addFine(fine);
         
-        // Cannot borrow with unpaid fine
-        Loan loan1 = borrowingService.borrowBook(user1, book1);
-        assertNull(loan1);
+        // Cannot borrow with unpaid fine - should throw exception
+        assertThrows(IllegalStateException.class,
+            () -> borrowingService.borrowBook(user1, book1));
         
         // Pay fine
         borrowingService.payFine(user1, 10.0);
@@ -117,10 +117,10 @@ public class Sprint4Test {
         Loan loan = borrowingService.borrowBook(user1, book1, borrowDate);
         assertNotNull(loan);
         
-        // Day 30: book is overdue, cannot borrow
+        // Day 30: book is overdue, cannot borrow - should throw exception
         LocalDate day30 = LocalDate.of(2025, 1, 30);
-        Loan loan2 = borrowingService.borrowBook(user1, book2, day30);
-        assertNull(loan2);
+        assertThrows(IllegalStateException.class,
+            () -> borrowingService.borrowBook(user1, book2, day30));
         
         // Return book
         borrowingService.returnBook(loan, day30);
@@ -269,7 +269,8 @@ public class Sprint4Test {
         Loan loan2 = borrowingService.borrowBook(user1, book2, today);
         assertNotNull(loan1);
         assertNotNull(loan2);
-        assertTrue(borrowingService.canBorrow(user1) == false); // Cannot borrow with active loans
+        // Users can have multiple active loans - canBorrow checks for overdue books and unpaid fines only
+        assertTrue(borrowingService.canBorrow(user1)); // Can still borrow if no overdue or fines
         
         // Cannot unregister with active loans
         assertFalse(userService.unregisterUser(user1));

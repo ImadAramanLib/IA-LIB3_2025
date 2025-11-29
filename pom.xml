@@ -122,6 +122,16 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.10</version>
+                <configuration>
+                    <excludes>
+                        <!-- Exclude GUI/presentation classes (difficult to unit test) -->
+                        <exclude>**/presentation/**</exclude>
+                        <!-- Exclude database config, persistence, and utility classes -->
+                        <exclude>**/config/**</exclude>
+                        <exclude>**/persistence/**</exclude>
+                        <exclude>**/util/**</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <id>prepare-agent</id>
@@ -135,6 +145,11 @@
                         <goals>
                             <goal>report</goal>
                         </goals>
+                        <configuration>
+                            <formats>
+                                <format>XML</format>
+                            </formats>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

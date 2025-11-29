@@ -1,6 +1,7 @@
 package edu.najah.library.service;
 
 import edu.najah.library.domain.User;
+import edu.najah.library.util.MockEmailServer;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for the Observer Design Pattern implementation.
- * Tests Observer interface, EmailNotifier, and NotificationService as Subject.
+ * Tests Observer interface, MockEmailServer as EmailNotifier, and NotificationService as Subject.
  * 
  * @author Imad Araman
  * @version 1.0
@@ -21,15 +22,13 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ObserverPatternTest {
     
     private MockEmailServer emailServer;
-    private EmailNotifier emailNotifier;
     private NotificationService notificationService;
     private OverdueDetectionService overdueDetectionService;
     private User user;
     
     @BeforeEach
     public void setUp() {
-        emailServer = new MockEmailServer(true);
-        emailNotifier = new EmailNotifier(emailServer, "Test Subject");
+        emailServer = new MockEmailServer();
         BorrowingService borrowingService = new BorrowingService();
         overdueDetectionService = new OverdueDetectionService(borrowingService);
         notificationService = new NotificationService(overdueDetectionService);
@@ -37,42 +36,21 @@ public class ObserverPatternTest {
     }
     
     @Test
-    @DisplayName("Observer Pattern: EmailNotifier implements Observer interface")
-    public void testEmailNotifierImplementsObserver() {
-        assertTrue(emailNotifier instanceof Observer);
-        assertEquals("Email", emailNotifier.getObserverType());
+    @DisplayName("Observer Pattern: MockEmailServer implements EmailNotifier interface")
+    public void testMockEmailServerImplementsEmailNotifier() {
+        assertTrue(emailServer instanceof edu.najah.library.service.EmailNotifier);
     }
     
     @Test
-    @DisplayName("Observer Pattern: EmailNotifier notifies user via email")
-    public void testEmailNotifierNotify() {
-        boolean result = emailNotifier.notify(user, "Test message");
+    @DisplayName("Observer Pattern: MockEmailServer notifies user via email")
+    public void testMockEmailServerNotify() {
+        emailServer.notify(user, "Test message");
         
-        assertTrue(result);
-        assertEquals(1, emailServer.getSentEmailCount());
+        assertEquals(1, emailServer.getMessageCount());
         
-        MockEmailServer.EmailRecord email = emailServer.getSentEmails().get(0);
-        assertEquals("john@example.com", email.getTo());
-        assertEquals("Test Subject", email.getSubject());
-        assertEquals("Test message", email.getMessage());
-    }
-    
-    @Test
-    @DisplayName("Observer Pattern: EmailNotifier with custom subject")
-    public void testEmailNotifierCustomSubject() {
-        boolean result = emailNotifier.notify(user, "Custom Subject", "Custom message");
-        
-        assertTrue(result);
-        MockEmailServer.EmailRecord email = emailServer.getSentEmails().get(0);
-        assertEquals("Custom Subject", email.getSubject());
-        assertEquals("Custom message", email.getMessage());
-    }
-    
-    @Test
-    @DisplayName("Observer Pattern: EmailNotifier returns false for null user")
-    public void testEmailNotifierNullUser() {
-        assertFalse(emailNotifier.notify(null, "Message"));
-        assertEquals(0, emailServer.getSentEmailCount());
+        MockEmailServer.EmailMessage email = emailServer.getSentMessages().get(0);
+        assertEquals("john@example.com", email.user.getEmail());
+        assertEquals("Test message", email.message);
     }
     
     @Test
@@ -84,92 +62,91 @@ public class ObserverPatternTest {
     @Test
     @DisplayName("Observer Pattern: NotificationService can attach and detach observers")
     public void testAttachDetachObservers() {
-        assertEquals(0, emailServer.getSentEmailCount());
+        assertEquals(0, emailServer.getMessageCount());
         
-        // Attach observer
-        notificationService.attach(emailNotifier);
+        // Attach observer (MockEmailServer implements EmailNotifier which we can wrap)
+        MockObserver emailObserver = new MockObserver(emailServer);
+        notificationService.attach(emailObserver);
         notificationService.notifyObservers(user, "Test message");
-        assertEquals(1, emailServer.getSentEmailCount());
+        assertEquals(1, emailServer.getMessageCount());
         
         // Detach observer
-        notificationService.detach(emailNotifier);
-        emailServer.clearSentEmails();
+        notificationService.detach(emailObserver);
+        emailServer.clear();
         notificationService.notifyObservers(user, "Test message");
-        assertEquals(0, emailServer.getSentEmailCount());
+        assertEquals(0, emailServer.getMessageCount());
     }
     
     @Test
     @DisplayName("Observer Pattern: NotificationService notifies all attached observers")
     public void testNotifyAllObservers() {
-        MockEmailServer emailServer2 = new MockEmailServer(true);
-        EmailNotifier emailNotifier2 = new EmailNotifier(emailServer2, "Subject 2");
+        MockEmailServer emailServer2 = new MockEmailServer();
+        MockObserver observer1 = new MockObserver(emailServer);
+        MockObserver observer2 = new MockObserver(emailServer2);
         
-        notificationService.attach(emailNotifier);
-        notificationService.attach(emailNotifier2);
+        notificationService.attach(observer1);
+        notificationService.attach(observer2);
         
         notificationService.notifyObservers(user, "Test message");
         
-        assertEquals(1, emailServer.getSentEmailCount());
-        assertEquals(1, emailServer2.getSentEmailCount());
+        assertEquals(1, emailServer.getMessageCount());
+        assertEquals(1, emailServer2.getMessageCount());
     }
     
     @Test
     @DisplayName("Observer Pattern: Multiple observers can be attached")
     public void testMultipleObservers() {
-        MockEmailServer emailServer2 = new MockEmailServer(true);
-        MockEmailServer emailServer3 = new MockEmailServer(true);
+        MockEmailServer emailServer2 = new MockEmailServer();
+        MockEmailServer emailServer3 = new MockEmailServer();
         
-        EmailNotifier notifier1 = new EmailNotifier(emailServer, "Subject 1");
-        EmailNotifier notifier2 = new EmailNotifier(emailServer2, "Subject 2");
-        EmailNotifier notifier3 = new EmailNotifier(emailServer3, "Subject 3");
+        MockObserver observer1 = new MockObserver(emailServer);
+        MockObserver observer2 = new MockObserver(emailServer2);
+        MockObserver observer3 = new MockObserver(emailServer3);
         
-        notificationService.attach(notifier1);
-        notificationService.attach(notifier2);
-        notificationService.attach(notifier3);
+        notificationService.attach(observer1);
+        notificationService.attach(observer2);
+        notificationService.attach(observer3);
         
         notificationService.notifyObservers(user, "Multi-observer message");
         
-        assertEquals(1, emailServer.getSentEmailCount());
-        assertEquals(1, emailServer2.getSentEmailCount());
-        assertEquals(1, emailServer3.getSentEmailCount());
+        assertEquals(1, emailServer.getMessageCount());
+        assertEquals(1, emailServer2.getMessageCount());
+        assertEquals(1, emailServer3.getMessageCount());
     }
     
     @Test
     @DisplayName("Observer Pattern: Constructor with initial observer")
     public void testConstructorWithInitialObserver() {
-        NotificationService service = new NotificationService(overdueDetectionService, emailNotifier);
+        MockObserver emailObserver = new MockObserver(emailServer);
+        NotificationService service = new NotificationService(overdueDetectionService, emailObserver);
         
         service.notifyObservers(user, "Message");
-        assertEquals(1, emailServer.getSentEmailCount());
-    }
-    
-    @Test
-    @DisplayName("Observer Pattern: EmailNotifier constructor throws exception for null EmailService")
-    public void testEmailNotifierNullEmailService() {
-        assertThrows(IllegalArgumentException.class, 
-            () -> new EmailNotifier(null));
+        assertEquals(1, emailServer.getMessageCount());
     }
     
     /**
-     * Mock observer for testing multiple observer types.
+     * Mock observer that wraps MockEmailServer and implements Observer interface.
      */
     private static class MockObserver implements Observer {
+        private MockEmailServer emailServer;
         private List<String> notifications = new ArrayList<>();
-        private String type;
         
-        public MockObserver(String type) {
-            this.type = type;
+        public MockObserver(MockEmailServer emailServer) {
+            this.emailServer = emailServer;
         }
         
         @Override
         public boolean notify(User user, String message) {
+            if (emailServer != null) {
+                emailServer.notify(user, message);
+            }
             notifications.add(message);
             return true;
         }
         
         @Override
         public String getObserverType() {
-            return type;
+            return "Email";
         }
         
         public List<String> getNotifications() {
@@ -180,19 +157,31 @@ public class ObserverPatternTest {
     @Test
     @DisplayName("Observer Pattern: Supports different observer types (mock SMS)")
     public void testDifferentObserverTypes() {
-        MockObserver smsObserver = new MockObserver("SMS");
-        MockObserver pushObserver = new MockObserver("Push");
+        MockObserver smsObserver = new MockObserver(null) {
+            @Override
+            public String getObserverType() {
+                return "SMS";
+            }
+        };
         
-        notificationService.attach(emailNotifier);
+        MockObserver pushObserver = new MockObserver(null) {
+            @Override
+            public String getObserverType() {
+                return "Push";
+            }
+        };
+        
+        MockObserver emailObserver = new MockObserver(emailServer);
+        
+        notificationService.attach(emailObserver);
         notificationService.attach(smsObserver);
         notificationService.attach(pushObserver);
         
         notificationService.notifyObservers(user, "Multi-channel message");
         
-        assertEquals(1, emailServer.getSentEmailCount());
+        assertEquals(1, emailServer.getMessageCount());
         assertEquals(1, smsObserver.getNotifications().size());
         assertEquals(1, pushObserver.getNotifications().size());
         assertEquals("Multi-channel message", smsObserver.getNotifications().get(0));
     }
 }
-
