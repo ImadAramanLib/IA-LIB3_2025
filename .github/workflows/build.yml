@@ -53,18 +53,17 @@ jobs:
             echo "Report size: $(wc -l < target/site/jacoco/jacoco.xml) lines"
           fi
 
-      - name: SonarCloud Scan (Coverage Upload)
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
         continue-on-error: true
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: >
-          mvn -B
-          org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
-          -Dsonar.projectKey=ImadAramanLib_IA-LIB3_2025
-          -Dsonar.organization=imadaramanlib
-          -Dsonar.host.url=https://sonarcloud.io
-          -Dsonar.coverage.exclusions=**/Main.java,**/*Test.java,**/presentation/**,**/config/**,**/persistence/**,**/util/**
-          -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
-          -Dsonar.scanner.force-deprecated-java-version-warning=false
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: .
+          args: >
+            -Dsonar.projectKey=ImadAramanLib_IA-LIB3_2025
+            -Dsonar.organization=imadaramanlib
+            -Dsonar.coverage.exclusions=**/Main.java,**/*Test.java,**/presentation/**,**/config/**,**/persistence/**,**/util/**
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
