@@ -10,12 +10,10 @@ import java.util.Objects;
 
 /**
  * Service providing basic book management and search capabilities.
- * <p>
- * Responsibilities:
+ * <p>Responsibilities:
  * - Maintain an in-memory list of books
  * - Allow admins to add books (requires login via AuthenticationService)
  * - Search books by title, author (partial matching), and ISBN
- * </p>
  * 
  * @author Imad Araman
  * @version 1.0

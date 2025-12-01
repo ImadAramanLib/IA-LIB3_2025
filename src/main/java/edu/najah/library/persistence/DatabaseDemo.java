@@ -14,14 +14,12 @@ import jakarta.persistence.EntityTransaction;
  *   <li>Save data to the database</li>
  *   <li>Query data from the database</li>
  * </ul>
- * </p>
  * 
  * <p>To run this demo:
  * <ol>
  *   <li>Make sure your Neon database credentials are set as environment variables</li>
  *   <li>Run: mvn exec:java -Dexec.mainClass="edu.najah.library.persistence.DatabaseDemo"</li>
  * </ol>
- * </p>
  * 
  * @author Imad Araman
  * @version 1.0

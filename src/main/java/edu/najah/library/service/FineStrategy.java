@@ -13,7 +13,6 @@ package edu.najah.library.service;
  *   <li>CDs: 20 NIS per day</li>
  *   <li>Journals: 15 NIS per day</li>
  * </ul>
- * </p>
  * 
  * @author Imad Araman
  * @version 1.0

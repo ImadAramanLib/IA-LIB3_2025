@@ -16,7 +16,6 @@ import jakarta.persistence.Persistence;
  *   <li>NEON_DB_USER - Database username</li>
  *   <li>NEON_DB_PASSWORD - Database password</li>
  * </ul>
- * </p>
  * 
  * @author Imad Araman
  * @version 1.0

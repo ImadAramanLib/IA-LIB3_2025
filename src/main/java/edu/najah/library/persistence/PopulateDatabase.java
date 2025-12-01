@@ -17,14 +17,12 @@ import java.util.Random;
  *   <li>Admin: ImadAR / ImadImad119</li>
  *   <li>5 randomly generated users</li>
  * </ul>
- * </p>
  * 
  * <p>To run:
  * <ol>
  *   <li>Set environment variables: NEON_DB_URL, NEON_DB_USER, NEON_DB_PASSWORD</li>
  *   <li>Run: mvn exec:java -Dexec.mainClass="edu.najah.library.persistence.PopulateDatabase"</li>
  * </ol>
- * </p>
  * 
  * @author Imad Araman
  * @version 1.0
