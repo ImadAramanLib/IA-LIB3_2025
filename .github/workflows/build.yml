@@ -53,17 +53,6 @@ jobs:
             echo "Report size: $(wc -l < target/site/jacoco/jacoco.xml) lines"
           fi
 
-      - name: SonarCloud Scan
-        continue-on-error: true
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: >
-          mvn -B
-          org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
-          -Dsonar.projectKey=ImadAramanLib_IA-LIB3_2025
-          -Dsonar.organization=imadaramanlib
-          -Dsonar.host.url=https://sonarcloud.io
-          -Dsonar.coverage.exclusions=**/Main.java,**/*Test.java,**/presentation/**,**/config/**,**/persistence/**,**/util/**
-          -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+      # SonarCloud Scan removed - using automatic analysis instead
+      # Automatic analysis runs automatically when enabled in SonarCloud project settings
 
