@@ -43,7 +43,7 @@ public class DatabaseSetupVerificationTest {
     @DisplayName("Verify DatabaseConfig class exists and is accessible")
     void testDatabaseConfigClassExists() {
         assertNotNull(DatabaseConfig.class);
-        assertTrue(DatabaseConfig.class.getName().equals("edu.najah.library.persistence.DatabaseConfig"));
+        assertEquals("edu.najah.library.persistence.DatabaseConfig", DatabaseConfig.class.getName());
     }
     
     @Test

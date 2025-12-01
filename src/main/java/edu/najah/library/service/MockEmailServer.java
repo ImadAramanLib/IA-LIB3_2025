@@ -82,14 +82,9 @@ public class MockEmailServer implements EmailService {
             return false;
         }
         
-        if (testMode) {
-            // In test mode, record the email
-            sentEmails.add(new EmailRecord(to, subject, message));
-        } else {
-            // In production mode, actual email sending would occur here
-            // For now, we'll still record it
-            sentEmails.add(new EmailRecord(to, subject, message));
-        }
+        // Record the email (in test mode, this is the only action;
+        // in production mode, actual email sending would occur here before recording)
+        sentEmails.add(new EmailRecord(to, subject, message));
         
         return true;
     }
