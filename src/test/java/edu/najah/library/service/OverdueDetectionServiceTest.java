@@ -38,7 +38,7 @@ public class OverdueDetectionServiceTest {
     
     @Test
     void testGetOverdueLoansNone() {
-        Loan loan = borrowingService.borrowBook(user, book, borrowDate);
+        borrowingService.borrowBook(user, book, borrowDate);
         LocalDate currentDate = borrowDate.plusDays(20);
         
         List<Loan> overdueLoans = overdueService.getOverdueLoans(currentDate);
@@ -71,7 +71,7 @@ public class OverdueDetectionServiceTest {
     @Test
     void testGetOverdueLoansForUserNone() {
         User otherUser = new User("U002", "Jane Doe", "jane@example.com");
-        Loan loan = borrowingService.borrowBook(user, book, borrowDate);
+        borrowingService.borrowBook(user, book, borrowDate);
         LocalDate currentDate = borrowDate.plusDays(30);
         
         List<Loan> overdueLoans = overdueService.getOverdueLoansForUser(otherUser, currentDate);

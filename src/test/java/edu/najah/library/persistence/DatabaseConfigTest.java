@@ -66,7 +66,7 @@ public class DatabaseConfigTest {
     @DisplayName("DatabaseConfig: closeEntityManagerFactory handles null factory gracefully")
     void testCloseEntityManagerFactoryWithNull() {
         // Should not throw exception even if factory is null
-        assertDoesNotThrow(() -> DatabaseConfig.closeEntityManagerFactory());
+        assertDoesNotThrow(DatabaseConfig::closeEntityManagerFactory);
     }
     
     @Test

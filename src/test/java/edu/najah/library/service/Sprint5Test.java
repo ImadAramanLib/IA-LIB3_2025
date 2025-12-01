@@ -192,9 +192,9 @@ public class Sprint5Test {
     @DisplayName("US5.3: Mixed media overdue report includes both books and CDs")
     void testMixedMediaOverdueReport() {
         // Borrow a book and a CD on the same date
-        Loan bookLoan = borrowingService.borrowBook(user, book, borrowDate);
+        borrowingService.borrowBook(user, book, borrowDate);
         CD cd2 = new CD("CD 2", "Artist 2", "CD002");
-        Loan cdLoan = borrowingService.borrowCD(user, cd2, borrowDate);
+        borrowingService.borrowCD(user, cd2, borrowDate);
         
         // Use a date where both are overdue (after 30 days, book is 2 days overdue, CD is 23 days overdue)
         LocalDate currentDate = borrowDate.plusDays(30);
@@ -254,7 +254,7 @@ public class Sprint5Test {
     @DisplayName("Mockito: Email server is mocked and can verify email sending")
     void testEmailServerMocking() {
         // Setup: User has overdue items
-        Loan loan = borrowingService.borrowBook(user, book, borrowDate);
+        borrowingService.borrowBook(user, book, borrowDate);
         LocalDate currentDate = borrowDate.plusDays(30);
         
         // Send reminder
@@ -274,8 +274,8 @@ public class Sprint5Test {
         User user2 = new User("U002", "Jane Doe", "jane@example.com");
         Book book2 = new Book("Book 2", "Author 2", "ISBN456");
         
-        Loan loan1 = borrowingService.borrowBook(user, book, borrowDate);
-        Loan loan2 = borrowingService.borrowBook(user2, book2, borrowDate);
+        borrowingService.borrowBook(user, book, borrowDate);
+        borrowingService.borrowBook(user2, book2, borrowDate);
         LocalDate currentDate = borrowDate.plusDays(30);
         
         notificationService.sendReminderToUser(user, currentDate);

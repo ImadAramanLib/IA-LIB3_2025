@@ -80,7 +80,7 @@ public class BorrowingServiceTest {
     void testBorrowBookWithOverdueBooks() {
         // Create an overdue loan
         Book overdueBook = new Book("Overdue Book", "Author", "ISBN456");
-        Loan overdueLoan = borrowingService.borrowBook(user, overdueBook, borrowDate);
+        borrowingService.borrowBook(user, overdueBook, borrowDate);
         LocalDate currentDate = borrowDate.plusDays(30); // Loan is now overdue
         
         // US4.1: Should throw exception when trying to borrow with overdue books

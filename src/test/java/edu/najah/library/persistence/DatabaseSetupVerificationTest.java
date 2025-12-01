@@ -50,8 +50,8 @@ public class DatabaseSetupVerificationTest {
     @DisplayName("Verify DatabaseConfig has required methods")
     void testDatabaseConfigMethods() {
         // Verify static methods exist by checking they can be called
-        assertDoesNotThrow(() -> DatabaseConfig.isInitialized());
-        assertDoesNotThrow(() -> DatabaseConfig.closeEntityManagerFactory());
+        assertDoesNotThrow(DatabaseConfig::isInitialized);
+        assertDoesNotThrow(DatabaseConfig::closeEntityManagerFactory);
         
         // getEntityManagerFactory without params should return null if no env vars set
         // This is expected behavior - not an error

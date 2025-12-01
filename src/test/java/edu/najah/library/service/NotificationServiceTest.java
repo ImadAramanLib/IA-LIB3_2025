@@ -1,7 +1,6 @@
 package edu.najah.library.service;
 
 import edu.najah.library.domain.Book;
-import edu.najah.library.domain.Loan;
 import edu.najah.library.domain.User;
 import edu.najah.library.util.MockEmailServer;
 

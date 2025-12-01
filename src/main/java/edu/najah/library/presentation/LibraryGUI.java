@@ -74,14 +74,12 @@ public class LibraryGUI extends JFrame {
     // Book Management
     private JTextField bookTitleField, bookAuthorField, bookIsbnField;
     private JButton addBookButton;
-    private JTable booksTable;
     private DefaultTableModel booksTableModel;
     
     // Search
     private JTextField searchField;
     private JComboBox<String> searchTypeCombo;
     private JButton searchButton;
-    private JTable searchResultsTable;
     private DefaultTableModel searchResultsTableModel;
     
     // Borrowing
@@ -93,19 +91,16 @@ public class LibraryGUI extends JFrame {
     // Fines
     private JTextField fineAmountField;
     private JButton payFineButton;
-    private JTable finesTable;
     private DefaultTableModel finesTableModel;
     
     // User Management (Admin only)
     private JTextField userIdField, userFullNameField, userEmailField, userUsernameField;
     private JPasswordField userPasswordField;
     private JButton registerUserButton, unregisterUserButton;
-    private JTable usersTable;
     private DefaultTableModel usersTableModel;
     
     // Overdue (Admin only)
     private JButton checkOverdueButton, sendRemindersButton;
-    private JTable overdueTable;
     private DefaultTableModel overdueTableModel;
     
     /**
@@ -463,7 +458,7 @@ public class LibraryGUI extends JFrame {
             @Override
             public boolean isCellEditable(int row, int column) { return false; }
         };
-        booksTable = new JTable(booksTableModel);
+        JTable booksTable = new JTable(booksTableModel);
         booksTable.setFont(new Font(FONT_NAME, Font.PLAIN, 11));
         booksTable.setRowHeight(25);
         JScrollPane scrollPane = new JScrollPane(booksTable);
@@ -502,7 +497,7 @@ public class LibraryGUI extends JFrame {
             @Override
             public boolean isCellEditable(int row, int column) { return false; }
         };
-        searchResultsTable = new JTable(searchResultsTableModel);
+        JTable searchResultsTable = new JTable(searchResultsTableModel);
         searchResultsTable.setFont(new Font(FONT_NAME, Font.PLAIN, 11));
         searchResultsTable.setRowHeight(25);
         JScrollPane scrollPane = new JScrollPane(searchResultsTable);
@@ -597,7 +592,7 @@ public class LibraryGUI extends JFrame {
             @Override
             public boolean isCellEditable(int row, int column) { return false; }
         };
-        finesTable = new JTable(finesTableModel);
+        JTable finesTable = new JTable(finesTableModel);
         finesTable.setFont(new Font(FONT_NAME, Font.PLAIN, 11));
         finesTable.setRowHeight(25);
         JScrollPane scrollPane = new JScrollPane(finesTable);
@@ -668,7 +663,7 @@ public class LibraryGUI extends JFrame {
             @Override
             public boolean isCellEditable(int row, int column) { return false; }
         };
-        usersTable = new JTable(usersTableModel);
+        JTable usersTable = new JTable(usersTableModel);
         usersTable.setFont(new Font(FONT_NAME, Font.PLAIN, 11));
         usersTable.setRowHeight(25);
         JScrollPane scrollPane = new JScrollPane(usersTable);
@@ -710,7 +705,7 @@ public class LibraryGUI extends JFrame {
             @Override
             public boolean isCellEditable(int row, int column) { return false; }
         };
-        overdueTable = new JTable(overdueTableModel);
+        JTable overdueTable = new JTable(overdueTableModel);
         overdueTable.setFont(new Font(FONT_NAME, Font.PLAIN, 11));
         overdueTable.setRowHeight(25);
         JScrollPane scrollPane = new JScrollPane(overdueTable);
@@ -815,14 +810,14 @@ public class LibraryGUI extends JFrame {
         // Try to find user by username
         User user = databaseService.findUserByUsername(username);
         if (user != null && user.getPassword() != null && user.getPassword().equals(password)) {
-            handleUserLoginSuccess(username, user);
+            handleUserLoginSuccess(user);
             return true;
         }
         
         // Fallback: try by user ID (for backward compatibility)
         user = databaseService.findUserById(username);
         if (user != null && (user.getPassword() == null || user.getPassword().isEmpty())) {
-            handleUserLoginSuccess(username, user);
+            handleUserLoginSuccess(user);
             return true;
         }
         
@@ -863,10 +858,9 @@ public class LibraryGUI extends JFrame {
     /**
      * Handles successful user login by setting up the session and UI.
      * 
-     * @param username the username of the logged-in user
      * @param user the User object for the logged-in user
      */
-    private void handleUserLoginSuccess(String username, User user) {
+    private void handleUserLoginSuccess(User user) {
         isAdmin = false;
         currentUser = user;
         showMainApplication();

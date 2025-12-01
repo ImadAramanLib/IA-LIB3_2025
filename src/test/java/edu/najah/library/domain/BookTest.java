@@ -164,7 +164,7 @@ public class BookTest {
         book.setQuantity(0);
         
         assertThrows(IllegalStateException.class, 
-            () -> book.decrementQuantity(), 
+            book::decrementQuantity, 
             "Decrementing quantity at 0 should throw exception");
     }
     
