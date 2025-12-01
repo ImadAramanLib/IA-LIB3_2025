@@ -56,12 +56,13 @@ jobs:
       - name: SonarCloud Scan
         continue-on-error: true
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.ImadLib }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: >
           mvn -B
           org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
-          -Dsonar.coverage.exclusions=**/Main.java,**/*Test.java,**/presentation/**,**/config/**,**/persistence/**,**/util/**
+          -Dsonar.projectKey=ImadAramanLib_IA-LIB3_2025
           -Dsonar.organization=imadaramanlib
+          -Dsonar.coverage.exclusions=**/Main.java,**/*Test.java,**/presentation/**,**/config/**,**/persistence/**,**/util/**
           -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
