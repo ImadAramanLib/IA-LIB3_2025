@@ -15,7 +15,7 @@ public class SetupTest {
      * Test to verify that JUnit 5 is properly configured.
      */
     @Test
-    public void testSetup() {
+    void testSetup() {
         assertTrue(true, "If this test passes, Maven and JUnit are properly configured!");
     }
     
@@ -23,7 +23,7 @@ public class SetupTest {
      * Test basic arithmetic to ensure Java environment works.
      */
     @Test
-    public void testBasicJavaFunctionality() {
+    void testBasicJavaFunctionality() {
         int result = 2 + 2;
         assertEquals(4, result, "Basic Java operations should work correctly");
     }

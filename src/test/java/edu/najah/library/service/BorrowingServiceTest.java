@@ -27,7 +27,7 @@ public class BorrowingServiceTest {
     private LocalDate borrowDate;
     
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         borrowingService = new BorrowingService();
         book = new Book("Test Book", "Test Author", "ISBN123");
         user = new User("U001", "John Doe", "john@example.com");
@@ -35,7 +35,7 @@ public class BorrowingServiceTest {
     }
     
     @Test
-    public void testBorrowBookSuccess() {
+    void testBorrowBookSuccess() {
         Loan loan = borrowingService.borrowBook(user, book, borrowDate);
         
         assertNotNull(loan);
@@ -45,7 +45,7 @@ public class BorrowingServiceTest {
     }
     
     @Test
-    public void testBorrowBookUnavailable() {
+    void testBorrowBookUnavailable() {
         book.setAvailable(false);
         Loan loan = borrowingService.borrowBook(user, book, borrowDate);
         
@@ -53,7 +53,7 @@ public class BorrowingServiceTest {
     }
     
     @Test
-    public void testBorrowBookWithUnpaidFines() {
+    void testBorrowBookWithUnpaidFines() {
         Fine fine = new Fine(user, 5.0, borrowDate);
         borrowingService.addFine(fine);
         
@@ -65,7 +65,7 @@ public class BorrowingServiceTest {
     }
     
     @Test
-    public void testBorrowBookWithOverdueBooks() {
+    void testBorrowBookWithOverdueBooks() {
         // Create an overdue loan
         Book overdueBook = new Book("Overdue Book", "Author", "ISBN456");
         Loan overdueLoan = borrowingService.borrowBook(user, overdueBook, borrowDate);
@@ -80,7 +80,7 @@ public class BorrowingServiceTest {
     }
     
     @Test
-    public void testBorrowBookWithBothOverdueBooksAndFines() {
+    void testBorrowBookWithBothOverdueBooksAndFines() {
         // Create an overdue loan
         Book overdueBook = new Book("Overdue Book", "Author", "ISBN456");
         borrowingService.borrowBook(user, overdueBook, borrowDate);
@@ -99,7 +99,7 @@ public class BorrowingServiceTest {
     }
     
     @Test
-    public void testCanBorrowWithOverdueBooks() {
+    void testCanBorrowWithOverdueBooks() {
         // Create an overdue loan
         Book overdueBook = new Book("Overdue Book", "Author", "ISBN456");
         borrowingService.borrowBook(user, overdueBook, borrowDate);
@@ -110,7 +110,7 @@ public class BorrowingServiceTest {
     }
     
     @Test
-    public void testCanBorrowWithReturnedOverdueBook() {
+    void testCanBorrowWithReturnedOverdueBook() {
         // Create a loan that was overdue but is now returned
         Book book = new Book("Book", "Author", "ISBN456");
         Loan loan = borrowingService.borrowBook(user, book, borrowDate);
@@ -122,7 +122,7 @@ public class BorrowingServiceTest {
     }
     
     @Test
-    public void testHasOverdueBooks() {
+    void testHasOverdueBooks() {
         // No overdue books initially
         assertFalse(borrowingService.hasOverdueBooks(user, borrowDate.plusDays(20)));
         
@@ -135,7 +135,7 @@ public class BorrowingServiceTest {
     }
     
     @Test
-    public void testHasOverdueBooksReturnsFalseForReturnedLoan() {
+    void testHasOverdueBooksReturnsFalseForReturnedLoan() {
         // Create a loan and return it before it becomes overdue
         Book book = new Book("Book", "Author", "ISBN456");
         Loan loan = borrowingService.borrowBook(user, book, borrowDate);
@@ -146,7 +146,7 @@ public class BorrowingServiceTest {
     }
     
     @Test
-    public void testReturnBook() {
+    void testReturnBook() {
         Loan loan = borrowingService.borrowBook(user, book, borrowDate);
         LocalDate returnDate = borrowDate.plusDays(10);
         
@@ -157,7 +157,7 @@ public class BorrowingServiceTest {
     }
     
     @Test
-    public void testGetActiveLoans() {
+    void testGetActiveLoans() {
         Loan loan1 = borrowingService.borrowBook(user, book, borrowDate);
         Book book2 = new Book("Another Book", "Another Author", "ISBN456");
         Loan loan2 = borrowingService.borrowBook(user, book2, borrowDate);
@@ -171,12 +171,12 @@ public class BorrowingServiceTest {
     }
     
     @Test
-    public void testCanBorrowWithoutFines() {
+    void testCanBorrowWithoutFines() {
         assertTrue(borrowingService.canBorrow(user));
     }
     
     @Test
-    public void testCannotBorrowWithFines() {
+    void testCannotBorrowWithFines() {
         Fine fine = new Fine(user, 5.0, borrowDate);
         borrowingService.addFine(fine);
         
@@ -185,7 +185,7 @@ public class BorrowingServiceTest {
     }
     
     @Test
-    public void testCannotBorrowWithOverdueBooks() {
+    void testCannotBorrowWithOverdueBooks() {
         // Create an overdue loan
         Book overdueBook = new Book("Overdue Book", "Author", "ISBN456");
         borrowingService.borrowBook(user, overdueBook, borrowDate);
@@ -197,7 +197,7 @@ public class BorrowingServiceTest {
     }
     
     @Test
-    public void testPayFine() {
+    void testPayFine() {
         Fine fine = new Fine(user, 5.0, borrowDate);
         borrowingService.addFine(fine);
         
@@ -206,7 +206,7 @@ public class BorrowingServiceTest {
     }
     
     @Test
-    public void testPayFinePartial() {
+    void testPayFinePartial() {
         Fine fine = new Fine(user, 5.0, borrowDate);
         borrowingService.addFine(fine);
         
@@ -216,7 +216,7 @@ public class BorrowingServiceTest {
     }
     
     @Test
-    public void testHasUnpaidFines() {
+    void testHasUnpaidFines() {
         assertFalse(borrowingService.hasUnpaidFines(user));
         
         Fine fine = new Fine(user, 5.0, borrowDate);
@@ -226,7 +226,7 @@ public class BorrowingServiceTest {
     }
     
     @Test
-    public void testGetUnpaidFines() {
+    void testGetUnpaidFines() {
         Fine fine1 = new Fine(user, 5.0, borrowDate);
         Fine fine2 = new Fine(user, 3.0, borrowDate);
         borrowingService.addFine(fine1);

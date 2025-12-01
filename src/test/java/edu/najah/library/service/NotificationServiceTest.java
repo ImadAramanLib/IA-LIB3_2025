@@ -34,7 +34,7 @@ public class NotificationServiceTest {
     private LocalDate borrowDate;
     
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         emailServer = new MockEmailServer();
         borrowingService = new BorrowingService();
         overdueDetectionService = new OverdueDetectionService(borrowingService);
@@ -60,7 +60,7 @@ public class NotificationServiceTest {
     
     @Test
     @DisplayName("US3.1: sendReminderToUser sends email with correct message format")
-    public void testSendReminderToUserSendsCorrectMessage() {
+    void testSendReminderToUserSendsCorrectMessage() {
         // Create an overdue loan
         Loan loan = borrowingService.borrowBook(user, book, borrowDate);
         LocalDate currentDate = borrowDate.plusDays(30); // 2 days overdue
@@ -79,7 +79,7 @@ public class NotificationServiceTest {
     
     @Test
     @DisplayName("US3.1: reminder message uses correct format for multiple overdue books")
-    public void testReminderMessageMultipleBooks() {
+    void testReminderMessageMultipleBooks() {
         // Create multiple overdue loans
         Book book1 = new Book("Book 1", "Author 1", "ISBN1");
         Book book2 = new Book("Book 2", "Author 2", "ISBN2");
@@ -100,7 +100,7 @@ public class NotificationServiceTest {
     
     @Test
     @DisplayName("US3.1: sendOverdueReminders sends emails to all users with overdue books")
-    public void testSendOverdueRemindersToAllUsers() {
+    void testSendOverdueRemindersToAllUsers() {
         User user2 = new User("U002", "Jane Doe", "jane@example.com");
         Book book2 = new Book("Book 2", "Author 2", "ISBN2");
         
@@ -118,7 +118,7 @@ public class NotificationServiceTest {
     
     @Test
     @DisplayName("sendReminderToUser returns false when user has no overdue books")
-    public void testSendReminderReturnsFalseWhenNoOverdue() {
+    void testSendReminderReturnsFalseWhenNoOverdue() {
         // Create a loan that's not overdue
         Loan loan = borrowingService.borrowBook(user, book, borrowDate);
         LocalDate currentDate = borrowDate.plusDays(20); // Not overdue yet
@@ -131,7 +131,7 @@ public class NotificationServiceTest {
     
     @Test
     @DisplayName("sendReminderToUser returns false for null user")
-    public void testSendReminderReturnsFalseForNullUser() {
+    void testSendReminderReturnsFalseForNullUser() {
         LocalDate currentDate = borrowDate.plusDays(30);
         
         boolean result = notificationService.sendReminderToUser(null, currentDate);
@@ -142,7 +142,7 @@ public class NotificationServiceTest {
     
     @Test
     @DisplayName("sendReminderToUser returns false for user without email")
-    public void testSendReminderReturnsFalseForUserWithoutEmail() {
+    void testSendReminderReturnsFalseForUserWithoutEmail() {
         User userNoEmail = new User("U003", "No Email User", null);
         Loan loan = borrowingService.borrowBook(userNoEmail, book, borrowDate);
         LocalDate currentDate = borrowDate.plusDays(30);
@@ -155,7 +155,7 @@ public class NotificationServiceTest {
     
     @Test
     @DisplayName("sendOverdueReminders returns 0 when no overdue loans exist")
-    public void testSendOverdueRemindersReturnsZeroWhenNoOverdue() {
+    void testSendOverdueRemindersReturnsZeroWhenNoOverdue() {
         // Create a loan that's not overdue
         borrowingService.borrowBook(user, book, borrowDate);
         LocalDate currentDate = borrowDate.plusDays(20);
@@ -168,7 +168,7 @@ public class NotificationServiceTest {
     
     @Test
     @DisplayName("sendOverdueReminders uses current date when no date provided")
-    public void testSendOverdueRemindersUsesCurrentDate() {
+    void testSendOverdueRemindersUsesCurrentDate() {
         // This test verifies the overloaded method works
         // We can't easily test "today" without mocking, but we can verify it doesn't crash
         borrowingService.borrowBook(user, book, LocalDate.now().minusDays(30));
@@ -179,7 +179,7 @@ public class NotificationServiceTest {
     
     @Test
     @DisplayName("sendOverdueReminders doesn't send duplicate emails to same user")
-    public void testSendOverdueRemindersNoDuplicates() {
+    void testSendOverdueRemindersNoDuplicates() {
         // Create multiple overdue loans for same user
         Book book1 = new Book("Book 1", "Author 1", "ISBN1");
         Book book2 = new Book("Book 2", "Author 2", "ISBN2");
@@ -202,7 +202,7 @@ public class NotificationServiceTest {
     
     @Test
     @DisplayName("constructor throws exception for null dependencies")
-    public void testConstructorThrowsExceptionForNullDependencies() {
+    void testConstructorThrowsExceptionForNullDependencies() {
         assertThrows(IllegalArgumentException.class, 
             () -> new NotificationService(null));
         Observer emailObserver = new Observer() {

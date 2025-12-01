@@ -16,7 +16,7 @@ public class FineStrategyTest {
     
     @Test
     @DisplayName("BookFineStrategy: calculates fine correctly (10 NIS per day)")
-    public void testBookFineStrategy() {
+    void testBookFineStrategy() {
         FineStrategy strategy = new BookFineStrategy();
         
         assertEquals(10, strategy.getFineRatePerDay());
@@ -28,7 +28,7 @@ public class FineStrategyTest {
     
     @Test
     @DisplayName("CDFineStrategy: calculates fine correctly (20 NIS per day)")
-    public void testCDFineStrategy() {
+    void testCDFineStrategy() {
         FineStrategy strategy = new CDFineStrategy();
         
         assertEquals(20, strategy.getFineRatePerDay());
@@ -40,7 +40,7 @@ public class FineStrategyTest {
     
     @Test
     @DisplayName("JournalFineStrategy: calculates fine correctly (15 NIS per day)")
-    public void testJournalFineStrategy() {
+    void testJournalFineStrategy() {
         FineStrategy strategy = new JournalFineStrategy();
         
         assertEquals(15, strategy.getFineRatePerDay());
@@ -52,7 +52,7 @@ public class FineStrategyTest {
     
     @Test
     @DisplayName("FineStrategyFactory: returns correct strategy for each item type")
-    public void testFineStrategyFactory() {
+    void testFineStrategyFactory() {
         FineStrategy bookStrategy = FineStrategyFactory.getStrategy(FineStrategyFactory.ItemType.BOOK);
         FineStrategy cdStrategy = FineStrategyFactory.getStrategy(FineStrategyFactory.ItemType.CD);
         FineStrategy journalStrategy = FineStrategyFactory.getStrategy(FineStrategyFactory.ItemType.JOURNAL);
@@ -68,14 +68,14 @@ public class FineStrategyTest {
     
     @Test
     @DisplayName("FineStrategyFactory: throws exception for null item type")
-    public void testFineStrategyFactoryNullType() {
+    void testFineStrategyFactoryNullType() {
         assertThrows(IllegalArgumentException.class, 
             () -> FineStrategyFactory.getStrategy(null));
     }
     
     @Test
     @DisplayName("FineStrategyFactory: getDefaultStrategy returns BookFineStrategy")
-    public void testFineStrategyFactoryDefault() {
+    void testFineStrategyFactoryDefault() {
         FineStrategy defaultStrategy = FineStrategyFactory.getDefaultStrategy();
         
         assertTrue(defaultStrategy instanceof BookFineStrategy);
@@ -84,7 +84,7 @@ public class FineStrategyTest {
     
     @Test
     @DisplayName("Different strategies calculate different fines for same days")
-    public void testStrategyDifferences() {
+    void testStrategyDifferences() {
         FineStrategy bookStrategy = new BookFineStrategy();
         FineStrategy cdStrategy = new CDFineStrategy();
         FineStrategy journalStrategy = new JournalFineStrategy();

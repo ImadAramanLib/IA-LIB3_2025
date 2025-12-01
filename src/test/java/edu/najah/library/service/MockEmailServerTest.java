@@ -20,13 +20,13 @@ public class MockEmailServerTest {
     private MockEmailServer emailServer;
     
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         emailServer = new MockEmailServer(true); // Test mode enabled
     }
     
     @Test
     @DisplayName("MockEmailServer: records sent emails in test mode")
-    public void testRecordsEmailsInTestMode() {
+    void testRecordsEmailsInTestMode() {
         emailServer.sendEmail("user@example.com", "Test Subject", "Test Message");
         
         assertEquals(1, emailServer.getSentEmailCount());
@@ -41,7 +41,7 @@ public class MockEmailServerTest {
     
     @Test
     @DisplayName("MockEmailServer: isTestMode returns true when in test mode")
-    public void testIsTestMode() {
+    void testIsTestMode() {
         assertTrue(emailServer.isTestMode());
         
         MockEmailServer productionServer = new MockEmailServer(false);
@@ -50,14 +50,14 @@ public class MockEmailServerTest {
     
     @Test
     @DisplayName("MockEmailServer: default constructor enables test mode")
-    public void testDefaultConstructorEnablesTestMode() {
+    void testDefaultConstructorEnablesTestMode() {
         MockEmailServer defaultServer = new MockEmailServer();
         assertTrue(defaultServer.isTestMode());
     }
     
     @Test
     @DisplayName("MockEmailServer: records multiple emails")
-    public void testRecordsMultipleEmails() {
+    void testRecordsMultipleEmails() {
         emailServer.sendEmail("user1@example.com", "Subject 1", "Message 1");
         emailServer.sendEmail("user2@example.com", "Subject 2", "Message 2");
         emailServer.sendEmail("user3@example.com", "Subject 3", "Message 3");
@@ -69,7 +69,7 @@ public class MockEmailServerTest {
     
     @Test
     @DisplayName("MockEmailServer: clearSentEmails removes all records")
-    public void testClearSentEmails() {
+    void testClearSentEmails() {
         emailServer.sendEmail("user@example.com", "Subject", "Message");
         assertEquals(1, emailServer.getSentEmailCount());
         
@@ -80,7 +80,7 @@ public class MockEmailServerTest {
     
     @Test
     @DisplayName("MockEmailServer: returns false for null parameters")
-    public void testReturnsFalseForNullParameters() {
+    void testReturnsFalseForNullParameters() {
         assertFalse(emailServer.sendEmail(null, "Subject", "Message"));
         assertFalse(emailServer.sendEmail("user@example.com", null, "Message"));
         assertFalse(emailServer.sendEmail("user@example.com", "Subject", null));
@@ -91,7 +91,7 @@ public class MockEmailServerTest {
     
     @Test
     @DisplayName("MockEmailServer: getSentEmails returns a copy")
-    public void testGetSentEmailsReturnsCopy() {
+    void testGetSentEmailsReturnsCopy() {
         emailServer.sendEmail("user@example.com", "Subject", "Message");
         
         List<MockEmailServer.EmailRecord> emails1 = emailServer.getSentEmails();
@@ -103,7 +103,7 @@ public class MockEmailServerTest {
     
     @Test
     @DisplayName("MockEmailServer: EmailRecord toString includes all fields")
-    public void testEmailRecordToString() {
+    void testEmailRecordToString() {
         MockEmailServer.EmailRecord record = new MockEmailServer.EmailRecord(
             "user@example.com", "Test Subject", "Test Message");
         

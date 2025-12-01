@@ -51,7 +51,7 @@ public class Sprint5Test {
     private LocalDate borrowDate;
     
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
         
         borrowingService = new BorrowingService();
@@ -84,7 +84,7 @@ public class Sprint5Test {
     
     @Test
     @DisplayName("US5.1: CD can be borrowed for 7 days")
-    public void testBorrowCDFor7Days() {
+    void testBorrowCDFor7Days() {
         Loan loan = borrowingService.borrowCD(user, cd, borrowDate);
         
         assertNotNull(loan);
@@ -96,7 +96,7 @@ public class Sprint5Test {
     
     @Test
     @DisplayName("US5.1: Book loan period is 28 days (different from CD)")
-    public void testBookLoanPeriodIs28Days() {
+    void testBookLoanPeriodIs28Days() {
         Loan bookLoan = borrowingService.borrowBook(user, book, borrowDate);
         Loan cdLoan = borrowingService.borrowCD(user, cd, borrowDate);
         
@@ -106,7 +106,7 @@ public class Sprint5Test {
     
     @Test
     @DisplayName("US5.1: Cannot borrow CD with unpaid fines")
-    public void testCannotBorrowCDWithUnpaidFines() {
+    void testCannotBorrowCDWithUnpaidFines() {
         // Add unpaid fine
         borrowingService.addFine(new edu.najah.library.domain.Fine(user, 10.0, borrowDate));
         
@@ -117,7 +117,7 @@ public class Sprint5Test {
     
     @Test
     @DisplayName("US5.1: Cannot borrow CD with overdue items")
-    public void testCannotBorrowCDWithOverdueItems() {
+    void testCannotBorrowCDWithOverdueItems() {
         // Borrow a book and make it overdue
         Book overdueBook = new Book("Overdue Book", "Author", "ISBN456");
         borrowingService.borrowBook(user, overdueBook, borrowDate);
@@ -130,7 +130,7 @@ public class Sprint5Test {
     
     @Test
     @DisplayName("US5.1: Return CD makes it available again")
-    public void testReturnCD() {
+    void testReturnCD() {
         Loan loan = borrowingService.borrowCD(user, cd, borrowDate);
         LocalDate returnDate = borrowDate.plusDays(5);
         
@@ -144,7 +144,7 @@ public class Sprint5Test {
     
     @Test
     @DisplayName("US5.2: CD overdue fine is 20 NIS per day")
-    public void testCDOverdueFineIs20NISPerDay() {
+    void testCDOverdueFineIs20NISPerDay() {
         Loan cdLoan = borrowingService.borrowCD(user, cd, borrowDate);
         LocalDate currentDate = borrowDate.plusDays(10); // 3 days overdue (due date is +7)
         
@@ -157,7 +157,7 @@ public class Sprint5Test {
     
     @Test
     @DisplayName("US5.2: Book overdue fine is 10 NIS per day (different from CD)")
-    public void testBookOverdueFineIs10NISPerDay() {
+    void testBookOverdueFineIs10NISPerDay() {
         Loan bookLoan = borrowingService.borrowBook(user, book, borrowDate);
         LocalDate currentDate = borrowDate.plusDays(30); // 2 days overdue (due date is +28)
         
@@ -170,7 +170,7 @@ public class Sprint5Test {
     
     @Test
     @DisplayName("US5.2: OverdueDetectionService automatically uses correct fine strategy based on item type")
-    public void testAutomaticFineStrategySelection() {
+    void testAutomaticFineStrategySelection() {
         // Book loan
         Loan bookLoan = borrowingService.borrowBook(user, book, borrowDate);
         LocalDate currentDate = borrowDate.plusDays(30); // 2 days overdue
@@ -190,7 +190,7 @@ public class Sprint5Test {
     
     @Test
     @DisplayName("US5.3: Mixed media overdue report includes both books and CDs")
-    public void testMixedMediaOverdueReport() {
+    void testMixedMediaOverdueReport() {
         // Borrow a book and a CD on the same date
         Loan bookLoan = borrowingService.borrowBook(user, book, borrowDate);
         CD cd2 = new CD("CD 2", "Artist 2", "CD002");
@@ -228,7 +228,7 @@ public class Sprint5Test {
     
     @Test
     @DisplayName("US5.3: Mixed media report handles multiple items of same type")
-    public void testMixedMediaReportMultipleItemsSameType() {
+    void testMixedMediaReportMultipleItemsSameType() {
         // Borrow multiple books
         Book book2 = new Book("Book 2", "Author 2", "ISBN456");
         Loan loan1 = borrowingService.borrowBook(user, book, borrowDate);
@@ -252,7 +252,7 @@ public class Sprint5Test {
     
     @Test
     @DisplayName("Mockito: Email server is mocked and can verify email sending")
-    public void testEmailServerMocking() {
+    void testEmailServerMocking() {
         // Setup: User has overdue items
         Loan loan = borrowingService.borrowBook(user, book, borrowDate);
         LocalDate currentDate = borrowDate.plusDays(30);
@@ -270,7 +270,7 @@ public class Sprint5Test {
     
     @Test
     @DisplayName("Mockito: Email server mock can verify multiple emails")
-    public void testEmailServerMockingMultipleEmails() {
+    void testEmailServerMockingMultipleEmails() {
         User user2 = new User("U002", "Jane Doe", "jane@example.com");
         Book book2 = new Book("Book 2", "Author 2", "ISBN456");
         
@@ -289,7 +289,7 @@ public class Sprint5Test {
     
     @Test
     @DisplayName("Mockito: Email server mock can verify no email sent when no overdue items")
-    public void testEmailServerMockingNoOverdueItems() {
+    void testEmailServerMockingNoOverdueItems() {
         // User has no overdue items
         LocalDate currentDate = borrowDate.plusDays(10);
         
@@ -303,7 +303,7 @@ public class Sprint5Test {
     
     @Test
     @DisplayName("Mockito: Time manipulation for overdue detection - CD becomes overdue after 7 days")
-    public void testTimeManipulationCDOverdue() {
+    void testTimeManipulationCDOverdue() {
         Loan cdLoan = borrowingService.borrowCD(user, cd, borrowDate);
         
         // Simulate time passing: 5 days (not overdue)
@@ -322,7 +322,7 @@ public class Sprint5Test {
     
     @Test
     @DisplayName("Mockito: Time manipulation for overdue detection - Book becomes overdue after 28 days")
-    public void testTimeManipulationBookOverdue() {
+    void testTimeManipulationBookOverdue() {
         Loan bookLoan = borrowingService.borrowBook(user, book, borrowDate);
         
         // Simulate time passing: 20 days (not overdue)
@@ -341,7 +341,7 @@ public class Sprint5Test {
     
     @Test
     @DisplayName("Mockito: Time manipulation - Mixed media with different due dates")
-    public void testTimeManipulationMixedMedia() {
+    void testTimeManipulationMixedMedia() {
         Loan bookLoan = borrowingService.borrowBook(user, book, borrowDate);
         Loan cdLoan = borrowingService.borrowCD(user, cd, borrowDate);
         
@@ -369,7 +369,7 @@ public class Sprint5Test {
     
     @Test
     @DisplayName("Polymorphism: LibraryItem interface allows uniform handling of different item types")
-    public void testPolymorphismLibraryItem() {
+    void testPolymorphismLibraryItem() {
         LibraryItem bookItem = book;
         LibraryItem cdItem = cd;
         
@@ -388,7 +388,7 @@ public class Sprint5Test {
     
     @Test
     @DisplayName("Polymorphism: borrowItem method handles different item types uniformly")
-    public void testPolymorphismBorrowItem() {
+    void testPolymorphismBorrowItem() {
         Loan bookLoan = borrowingService.borrowItem(user, book, borrowDate);
         Loan cdLoan = borrowingService.borrowItem(user, cd, borrowDate);
         

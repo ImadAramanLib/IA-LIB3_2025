@@ -21,7 +21,7 @@ public class LoanTest {
     private LocalDate borrowDate;
     
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         book = new Book("Test Book", "Test Author", "ISBN123");
         user = new User("U001", "John Doe", "john@example.com");
         borrowDate = LocalDate.of(2025, 1, 1);
@@ -29,7 +29,7 @@ public class LoanTest {
     }
     
     @Test
-    public void testLoanCreation() {
+    void testLoanCreation() {
         assertNotNull(loan);
         assertEquals(book, loan.getBook());
         assertEquals(user, loan.getUser());
@@ -39,44 +39,44 @@ public class LoanTest {
     }
     
     @Test
-    public void testIsOverdueWhenNotYet() {
+    void testIsOverdueWhenNotYet() {
         LocalDate currentDate = borrowDate.plusDays(20);
         assertFalse(loan.isOverdue(currentDate));
     }
     
     @Test
-    public void testIsOverdueWhenExactlyDue() {
+    void testIsOverdueWhenExactlyDue() {
         LocalDate currentDate = borrowDate.plusDays(28);
         assertFalse(loan.isOverdue(currentDate));
     }
     
     @Test
-    public void testIsOverdueWhenOverdue() {
+    void testIsOverdueWhenOverdue() {
         LocalDate currentDate = borrowDate.plusDays(30);
         assertTrue(loan.isOverdue(currentDate));
     }
     
     @Test
-    public void testIsOverdueWhenReturned() {
+    void testIsOverdueWhenReturned() {
         loan.setReturnDate(borrowDate.plusDays(15));
         LocalDate currentDate = borrowDate.plusDays(30);
         assertFalse(loan.isOverdue(currentDate));
     }
     
     @Test
-    public void testGetDaysOverdueWhenNotOverdue() {
+    void testGetDaysOverdueWhenNotOverdue() {
         LocalDate currentDate = borrowDate.plusDays(20);
         assertEquals(0, loan.getDaysOverdue(currentDate));
     }
     
     @Test
-    public void testGetDaysOverdueWhenOverdue() {
+    void testGetDaysOverdueWhenOverdue() {
         LocalDate currentDate = borrowDate.plusDays(32);
         assertEquals(4, loan.getDaysOverdue(currentDate));
     }
     
     @Test
-    public void testIsReturned() {
+    void testIsReturned() {
         assertFalse(loan.isReturned());
         
         loan.setReturnDate(borrowDate.plusDays(10));
@@ -84,7 +84,7 @@ public class LoanTest {
     }
     
     @Test
-    public void testSettersAndGetters() {
+    void testSettersAndGetters() {
         Book newBook = new Book("New Book", "New Author", "ISBN456");
         User newUser = new User("U002", "Jane Doe", "jane@example.com");
         LocalDate newBorrowDate = LocalDate.of(2025, 2, 1);
@@ -105,7 +105,7 @@ public class LoanTest {
     }
     
     @Test
-    public void testToString() {
+    void testToString() {
         String toString = loan.toString();
         
         assertNotNull(toString);

@@ -34,7 +34,7 @@ public class UserManagementServiceTest {
     private User user;
     
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         emailServer = new MockEmailServer(true);
         authenticationService = new AuthenticationService();
         borrowingService = new BorrowingService();
@@ -50,7 +50,7 @@ public class UserManagementServiceTest {
     
     @Test
     @DisplayName("registerUser adds user to the system")
-    public void testRegisterUser() {
+    void testRegisterUser() {
         User newUser = new User("U002", "Jane Doe", "jane@example.com");
         
         boolean result = userManagementService.registerUser(newUser);
@@ -62,7 +62,7 @@ public class UserManagementServiceTest {
     
     @Test
     @DisplayName("registerUser returns false for duplicate user")
-    public void testRegisterUserDuplicate() {
+    void testRegisterUserDuplicate() {
         boolean result = userManagementService.registerUser(user);
         
         assertFalse(result);
@@ -71,13 +71,13 @@ public class UserManagementServiceTest {
     
     @Test
     @DisplayName("registerUser returns false for null user")
-    public void testRegisterUserNull() {
+    void testRegisterUserNull() {
         assertFalse(userManagementService.registerUser(null));
     }
     
     @Test
     @DisplayName("US4.2: unregisterUser requires admin login")
-    public void testUnregisterUserRequiresAdminLogin() {
+    void testUnregisterUserRequiresAdminLogin() {
         // Not logged in
         assertFalse(authenticationService.isLoggedIn());
         
@@ -90,7 +90,7 @@ public class UserManagementServiceTest {
     
     @Test
     @DisplayName("US4.2: unregisterUser successfully removes user when admin is logged in")
-    public void testUnregisterUserSuccess() {
+    void testUnregisterUserSuccess() {
         authenticationService.login("admin", "password123");
         
         boolean result = userManagementService.unregisterUser("U001");
@@ -102,7 +102,7 @@ public class UserManagementServiceTest {
     
     @Test
     @DisplayName("US4.2: unregisterUser sends notification email")
-    public void testUnregisterUserSendsNotificationEmail() {
+    void testUnregisterUserSendsNotificationEmail() {
         authenticationService.login("admin", "password123");
         
         userManagementService.unregisterUser("U001");
@@ -118,7 +118,7 @@ public class UserManagementServiceTest {
     
     @Test
     @DisplayName("US4.2: unregisterUser blocks user with active loans")
-    public void testUnregisterUserWithActiveLoans() {
+    void testUnregisterUserWithActiveLoans() {
         authenticationService.login("admin", "password123");
         
         // Create an active loan
@@ -134,7 +134,7 @@ public class UserManagementServiceTest {
     
     @Test
     @DisplayName("US4.2: unregisterUser blocks user with unpaid fines")
-    public void testUnregisterUserWithUnpaidFines() {
+    void testUnregisterUserWithUnpaidFines() {
         authenticationService.login("admin", "password123");
         
         // Create an unpaid fine
@@ -150,7 +150,7 @@ public class UserManagementServiceTest {
     
     @Test
     @DisplayName("US4.2: unregisterUser allows user with returned loans and paid fines")
-    public void testUnregisterUserWithReturnedLoansAndPaidFines() {
+    void testUnregisterUserWithReturnedLoansAndPaidFines() {
         authenticationService.login("admin", "password123");
         
         // Create a loan and return it
@@ -171,7 +171,7 @@ public class UserManagementServiceTest {
     
     @Test
     @DisplayName("unregisterUser returns false for non-existent user")
-    public void testUnregisterUserNonExistent() {
+    void testUnregisterUserNonExistent() {
         authenticationService.login("admin", "password123");
         
         boolean result = userManagementService.unregisterUser("NONEXISTENT");
@@ -181,7 +181,7 @@ public class UserManagementServiceTest {
     
     @Test
     @DisplayName("unregisterUser returns false for null userId")
-    public void testUnregisterUserNull() {
+    void testUnregisterUserNull() {
         authenticationService.login("admin", "password123");
         
         boolean result = userManagementService.unregisterUser(null);
@@ -191,7 +191,7 @@ public class UserManagementServiceTest {
     
     @Test
     @DisplayName("unregisterUser does not send email if user has no email")
-    public void testUnregisterUserNoEmail() {
+    void testUnregisterUserNoEmail() {
         authenticationService.login("admin", "password123");
         
         User userNoEmail = new User("U003", "No Email", null);
@@ -205,14 +205,14 @@ public class UserManagementServiceTest {
     
     @Test
     @DisplayName("isUserRegistered returns true for registered user")
-    public void testIsUserRegistered() {
+    void testIsUserRegistered() {
         assertTrue(userManagementService.isUserRegistered("U001"));
         assertFalse(userManagementService.isUserRegistered("NONEXISTENT"));
     }
     
     @Test
     @DisplayName("findUserById returns correct user")
-    public void testFindUserById() {
+    void testFindUserById() {
         User found = userManagementService.findUserById("U001");
         assertEquals(user, found);
         
@@ -222,7 +222,7 @@ public class UserManagementServiceTest {
     
     @Test
     @DisplayName("getAllUsers returns all registered users")
-    public void testGetAllUsers() {
+    void testGetAllUsers() {
         User user2 = new User("U002", "Jane Doe", "jane@example.com");
         userManagementService.registerUser(user2);
         
@@ -235,7 +235,7 @@ public class UserManagementServiceTest {
     
     @Test
     @DisplayName("constructor throws exception for null dependencies")
-    public void testConstructorThrowsExceptionForNullDependencies() {
+    void testConstructorThrowsExceptionForNullDependencies() {
         assertThrows(IllegalArgumentException.class, 
             () -> new UserManagementService(null, authenticationService, emailServer));
         assertThrows(IllegalArgumentException.class, 

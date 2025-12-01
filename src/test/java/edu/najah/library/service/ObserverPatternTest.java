@@ -27,7 +27,7 @@ public class ObserverPatternTest {
     private User user;
     
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         emailServer = new MockEmailServer();
         BorrowingService borrowingService = new BorrowingService();
         overdueDetectionService = new OverdueDetectionService(borrowingService);
@@ -37,13 +37,13 @@ public class ObserverPatternTest {
     
     @Test
     @DisplayName("Observer Pattern: MockEmailServer implements EmailNotifier interface")
-    public void testMockEmailServerImplementsEmailNotifier() {
+    void testMockEmailServerImplementsEmailNotifier() {
         assertTrue(emailServer instanceof edu.najah.library.service.EmailNotifier);
     }
     
     @Test
     @DisplayName("Observer Pattern: MockEmailServer notifies user via email")
-    public void testMockEmailServerNotify() {
+    void testMockEmailServerNotify() {
         emailServer.notify(user, "Test message");
         
         assertEquals(1, emailServer.getMessageCount());
@@ -55,13 +55,13 @@ public class ObserverPatternTest {
     
     @Test
     @DisplayName("Observer Pattern: NotificationService implements Subject interface")
-    public void testNotificationServiceImplementsSubject() {
+    void testNotificationServiceImplementsSubject() {
         assertTrue(notificationService instanceof Subject);
     }
     
     @Test
     @DisplayName("Observer Pattern: NotificationService can attach and detach observers")
-    public void testAttachDetachObservers() {
+    void testAttachDetachObservers() {
         assertEquals(0, emailServer.getMessageCount());
         
         // Attach observer (MockEmailServer implements EmailNotifier which we can wrap)
@@ -79,7 +79,7 @@ public class ObserverPatternTest {
     
     @Test
     @DisplayName("Observer Pattern: NotificationService notifies all attached observers")
-    public void testNotifyAllObservers() {
+    void testNotifyAllObservers() {
         MockEmailServer emailServer2 = new MockEmailServer();
         MockObserver observer1 = new MockObserver(emailServer);
         MockObserver observer2 = new MockObserver(emailServer2);
@@ -95,7 +95,7 @@ public class ObserverPatternTest {
     
     @Test
     @DisplayName("Observer Pattern: Multiple observers can be attached")
-    public void testMultipleObservers() {
+    void testMultipleObservers() {
         MockEmailServer emailServer2 = new MockEmailServer();
         MockEmailServer emailServer3 = new MockEmailServer();
         
@@ -116,7 +116,7 @@ public class ObserverPatternTest {
     
     @Test
     @DisplayName("Observer Pattern: Constructor with initial observer")
-    public void testConstructorWithInitialObserver() {
+    void testConstructorWithInitialObserver() {
         MockObserver emailObserver = new MockObserver(emailServer);
         NotificationService service = new NotificationService(overdueDetectionService, emailObserver);
         
@@ -156,7 +156,7 @@ public class ObserverPatternTest {
     
     @Test
     @DisplayName("Observer Pattern: Supports different observer types (mock SMS)")
-    public void testDifferentObserverTypes() {
+    void testDifferentObserverTypes() {
         MockObserver smsObserver = new MockObserver(null) {
             @Override
             public String getObserverType() {

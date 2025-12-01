@@ -33,7 +33,7 @@ public class Sprint4Test {
     private Book book3;
     
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         borrowingService = new BorrowingService();
         overdueDetectionService = new OverdueDetectionService(borrowingService);
         userService = new UserService(borrowingService);
@@ -55,7 +55,7 @@ public class Sprint4Test {
     // ===== Tests for US4.1: Borrow Restrictions =====
     
     @Test
-    public void testBorrowWithoutOverdueOrFines() {
+    void testBorrowWithoutOverdueOrFines() {
         // User should be able to borrow normally
         Loan loan = borrowingService.borrowBook(user1, book1);
         assertNotNull(loan);
@@ -63,7 +63,7 @@ public class Sprint4Test {
     }
     
     @Test
-    public void testCannotBorrowWithUnpaidFines() {
+    void testCannotBorrowWithUnpaidFines() {
         // Add unpaid fine to user
         Fine fine = new Fine(user1, 10.0, LocalDate.now());
         borrowingService.addFine(fine);
@@ -75,7 +75,7 @@ public class Sprint4Test {
     }
     
     @Test
-    public void testCannotBorrowWithOverdueBooks() {
+    void testCannotBorrowWithOverdueBooks() {
         // Borrow book on day 1
         LocalDate borrowDate = LocalDate.of(2025, 1, 1);
         Loan loan = borrowingService.borrowBook(user1, book1, borrowDate);
@@ -93,7 +93,7 @@ public class Sprint4Test {
     }
     
     @Test
-    public void testCanBorrowAfterPayingFines() {
+    void testCanBorrowAfterPayingFines() {
         // Add fine
         Fine fine = new Fine(user1, 10.0, LocalDate.now());
         borrowingService.addFine(fine);
@@ -111,7 +111,7 @@ public class Sprint4Test {
     }
     
     @Test
-    public void testCanBorrowAfterReturningOverdueBook() {
+    void testCanBorrowAfterReturningOverdueBook() {
         // Borrow book on day 1
         LocalDate borrowDate = LocalDate.of(2025, 1, 1);
         Loan loan = borrowingService.borrowBook(user1, book1, borrowDate);
@@ -131,7 +131,7 @@ public class Sprint4Test {
     }
     
     @Test
-    public void testHasOverdueBooks() {
+    void testHasOverdueBooks() {
         LocalDate borrowDate = LocalDate.of(2025, 1, 1);
         borrowingService.borrowBook(user1, book1, borrowDate);
         
@@ -147,27 +147,27 @@ public class Sprint4Test {
     // ===== Tests for US4.2: Unregister User =====
     
     @Test
-    public void testRegisterUser() {
+    void testRegisterUser() {
         User user3 = new User("U003", "Bob Johnson", "bob@example.com");
         assertTrue(userService.registerUser(user3));
         assertEquals(3, userService.getUserCount());
     }
     
     @Test
-    public void testRegisterDuplicateUser() {
+    void testRegisterDuplicateUser() {
         User duplicate = new User("U001", "Another John", "another@example.com");
         assertFalse(userService.registerUser(duplicate));
         assertEquals(2, userService.getUserCount()); // Still 2 users
     }
     
     @Test
-    public void testRegisterNullUser() {
+    void testRegisterNullUser() {
         assertFalse(userService.registerUser(null));
         assertEquals(2, userService.getUserCount());
     }
     
     @Test
-    public void testUnregisterUserNoLoansOrFines() {
+    void testUnregisterUserNoLoansOrFines() {
         // User2 has no loans or fines, should be able to unregister
         assertTrue(userService.unregisterUser(user2));
         assertEquals(1, userService.getUserCount());
@@ -175,7 +175,7 @@ public class Sprint4Test {
     }
     
     @Test
-    public void testCannotUnregisterUserWithActiveLoan() {
+    void testCannotUnregisterUserWithActiveLoan() {
         // User1 borrows a book
         Loan loan = borrowingService.borrowBook(user1, book1);
         assertNotNull(loan);
@@ -187,7 +187,7 @@ public class Sprint4Test {
     }
     
     @Test
-    public void testCannotUnregisterUserWithUnpaidFines() {
+    void testCannotUnregisterUserWithUnpaidFines() {
         // Add unpaid fine to user1
         Fine fine = new Fine(user1, 50.0, LocalDate.now());
         borrowingService.addFine(fine);
@@ -199,7 +199,7 @@ public class Sprint4Test {
     }
     
     @Test
-    public void testCanUnregisterUserAfterReturningBooks() {
+    void testCanUnregisterUserAfterReturningBooks() {
         // User1 borrows book
         LocalDate borrowDate = LocalDate.of(2025, 1, 1);
         Loan loan = borrowingService.borrowBook(user1, book1, borrowDate);
@@ -216,7 +216,7 @@ public class Sprint4Test {
     }
     
     @Test
-    public void testCanUnregisterUserAfterPayingFines() {
+    void testCanUnregisterUserAfterPayingFines() {
         // Add unpaid fine
         Fine fine = new Fine(user1, 50.0, LocalDate.now());
         borrowingService.addFine(fine);
@@ -233,7 +233,7 @@ public class Sprint4Test {
     }
     
     @Test
-    public void testFindUserById() {
+    void testFindUserById() {
         User found = userService.findUserById("U001");
         assertNotNull(found);
         assertEquals("John Doe", found.getName());
@@ -243,7 +243,7 @@ public class Sprint4Test {
     }
     
     @Test
-    public void testIsUserRegistered() {
+    void testIsUserRegistered() {
         assertTrue(userService.isUserRegistered(user1));
         assertTrue(userService.isUserRegistered(user2));
         
@@ -252,7 +252,7 @@ public class Sprint4Test {
     }
     
     @Test
-    public void testGetAllUsers() {
+    void testGetAllUsers() {
         List<User> users = userService.getUsers();
         assertEquals(2, users.size());
         assertTrue(users.contains(user1));
@@ -260,7 +260,7 @@ public class Sprint4Test {
     }
     
     @Test
-    public void testComplexScenario() {
+    void testComplexScenario() {
         // User1: borrows 2 books with no fines, then returns both
         LocalDate today = LocalDate.now();
         

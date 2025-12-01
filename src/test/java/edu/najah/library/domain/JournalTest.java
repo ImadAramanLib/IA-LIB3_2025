@@ -15,7 +15,7 @@ public class JournalTest {
      * Test creating a Journal with constructor.
      */
     @Test
-    public void testJournalCreation() {
+    void testJournalCreation() {
         Journal journal = new Journal("Nature", "Springer", "0028-0836");
         
         assertEquals("Nature", journal.getTitle());
@@ -28,7 +28,7 @@ public class JournalTest {
      * Test Journal creation with availability parameter.
      */
     @Test
-    public void testJournalCreationWithAvailability() {
+    void testJournalCreationWithAvailability() {
         Journal journal = new Journal("Science", "AAAS", "0036-8075", false);
         
         assertFalse(journal.isAvailable(), "Journal should be unavailable as specified");
@@ -38,7 +38,7 @@ public class JournalTest {
      * Test Journal setters.
      */
     @Test
-    public void testJournalSetters() {
+    void testJournalSetters() {
         Journal journal = new Journal();
         journal.setTitle("New Journal");
         journal.setPublisher("New Publisher");
@@ -55,7 +55,7 @@ public class JournalTest {
      * Test Journal equality based on ISSN.
      */
     @Test
-    public void testJournalEquality() {
+    void testJournalEquality() {
         Journal journal1 = new Journal("Title1", "Publisher1", "1234-5678");
         Journal journal2 = new Journal("Title2", "Publisher2", "1234-5678");
         Journal journal3 = new Journal("Title1", "Publisher1", "8765-4321");
@@ -68,7 +68,7 @@ public class JournalTest {
      * Test Journal hash code consistency.
      */
     @Test
-    public void testJournalHashCode() {
+    void testJournalHashCode() {
         Journal journal1 = new Journal("Title1", "Publisher1", "1234-5678");
         Journal journal2 = new Journal("Different Title", "Different Publisher", "1234-5678");
         
@@ -80,7 +80,7 @@ public class JournalTest {
      * Test Journal toString method.
      */
     @Test
-    public void testJournalToString() {
+    void testJournalToString() {
         Journal journal = new Journal("Nature", "Springer", "0028-0836");
         String result = journal.toString();
         
@@ -93,7 +93,7 @@ public class JournalTest {
      * Test default constructor creates available Journal.
      */
     @Test
-    public void testDefaultConstructor() {
+    void testDefaultConstructor() {
         Journal journal = new Journal();
         assertTrue(journal.isAvailable(), "Default constructor should create available journal");
     }

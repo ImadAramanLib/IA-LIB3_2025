@@ -33,7 +33,7 @@ public class ReminderServiceTest {
     private Book book3;
     
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         borrowingService = new BorrowingService();
         overdueDetectionService = new OverdueDetectionService(borrowingService);
         reminderService = new ReminderService(overdueDetectionService);
@@ -53,7 +53,7 @@ public class ReminderServiceTest {
     }
     
     @Test
-    public void testRegisterNotifier() {
+    void testRegisterNotifier() {
         ReminderService service = new ReminderService(overdueDetectionService);
         assertEquals(0, service.getNotifiers().size());
         
@@ -62,7 +62,7 @@ public class ReminderServiceTest {
     }
     
     @Test
-    public void testUnregisterNotifier() {
+    void testUnregisterNotifier() {
         reminderService.registerNotifier(mockEmailServer);
         assertEquals(1, reminderService.getNotifiers().size());
         
@@ -71,7 +71,7 @@ public class ReminderServiceTest {
     }
     
     @Test
-    public void testSendRemindersNoOverdueBooks() {
+    void testSendRemindersNoOverdueBooks() {
         // Borrow books on day 1
         LocalDate borrowDate = LocalDate.of(2025, 1, 1);
         borrowingService.borrowBook(user1, book1, borrowDate);
@@ -86,7 +86,7 @@ public class ReminderServiceTest {
     }
     
     @Test
-    public void testSendRemindersOneUserOneOverdueBook() {
+    void testSendRemindersOneUserOneOverdueBook() {
         // Borrow book on day 1
         LocalDate borrowDate = LocalDate.of(2025, 1, 1);
         borrowingService.borrowBook(user1, book1, borrowDate);
@@ -105,7 +105,7 @@ public class ReminderServiceTest {
     }
     
     @Test
-    public void testSendRemindersOneUserMultipleOverdueBooks() {
+    void testSendRemindersOneUserMultipleOverdueBooks() {
         // Borrow multiple books on day 1
         LocalDate borrowDate = LocalDate.of(2025, 1, 1);
         borrowingService.borrowBook(user1, book1, borrowDate);
@@ -124,7 +124,7 @@ public class ReminderServiceTest {
     }
     
     @Test
-    public void testSendRemindersMultipleUsers() {
+    void testSendRemindersMultipleUsers() {
         // User1 borrows book1
         LocalDate borrowDate1 = LocalDate.of(2025, 1, 1);
         borrowingService.borrowBook(user1, book1, borrowDate1);
@@ -150,7 +150,7 @@ public class ReminderServiceTest {
     }
     
     @Test
-    public void testSendRemindersAfterBookReturned() {
+    void testSendRemindersAfterBookReturned() {
         // Borrow book
         LocalDate borrowDate = LocalDate.of(2025, 1, 1);
         Loan loan = borrowingService.borrowBook(user1, book1, borrowDate);
@@ -168,7 +168,7 @@ public class ReminderServiceTest {
     }
     
     @Test
-    public void testSendRemindersMessageFormat() {
+    void testSendRemindersMessageFormat() {
         // Borrow 3 books
         LocalDate borrowDate = LocalDate.of(2025, 1, 1);
         borrowingService.borrowBook(user1, book1, borrowDate);
@@ -190,7 +190,7 @@ public class ReminderServiceTest {
     }
     
     @Test
-    public void testSendRemindersWithNoNotifiers() {
+    void testSendRemindersWithNoNotifiers() {
         ReminderService service = new ReminderService(overdueDetectionService);
         
         // Borrow book
@@ -205,7 +205,7 @@ public class ReminderServiceTest {
     }
     
     @Test
-    public void testMockEmailServerRecordsMessages() {
+    void testMockEmailServerRecordsMessages() {
         // Send messages directly to mock server
         mockEmailServer.notify(user1, "Test message 1");
         mockEmailServer.notify(user2, "Test message 2");
@@ -218,7 +218,7 @@ public class ReminderServiceTest {
     }
     
     @Test
-    public void testMockEmailServerClear() {
+    void testMockEmailServerClear() {
         mockEmailServer.notify(user1, "Test message");
         assertEquals(1, mockEmailServer.getMessageCount());
         

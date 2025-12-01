@@ -15,7 +15,7 @@ public class CDTest {
      * Test creating a CD with constructor.
      */
     @Test
-    public void testCDCreation() {
+    void testCDCreation() {
         CD cd = new CD("Greatest Hits", "The Beatles", "CD001");
         
         assertEquals("Greatest Hits", cd.getTitle());
@@ -28,7 +28,7 @@ public class CDTest {
      * Test CD creation with availability parameter.
      */
     @Test
-    public void testCDCreationWithAvailability() {
+    void testCDCreationWithAvailability() {
         CD cd = new CD("Album", "Artist", "CD002", false);
         
         assertFalse(cd.isAvailable(), "CD should be unavailable as specified");
@@ -38,7 +38,7 @@ public class CDTest {
      * Test CD setters.
      */
     @Test
-    public void testCDSetters() {
+    void testCDSetters() {
         CD cd = new CD();
         cd.setTitle("New Album");
         cd.setArtist("New Artist");
@@ -55,7 +55,7 @@ public class CDTest {
      * Test CD equality based on catalog number.
      */
     @Test
-    public void testCDEquality() {
+    void testCDEquality() {
         CD cd1 = new CD("Title1", "Artist1", "CD001");
         CD cd2 = new CD("Title2", "Artist2", "CD001");
         CD cd3 = new CD("Title1", "Artist1", "CD002");
@@ -68,7 +68,7 @@ public class CDTest {
      * Test CD hash code consistency.
      */
     @Test
-    public void testCDHashCode() {
+    void testCDHashCode() {
         CD cd1 = new CD("Title1", "Artist1", "CD001");
         CD cd2 = new CD("Different Title", "Different Artist", "CD001");
         
@@ -80,7 +80,7 @@ public class CDTest {
      * Test CD toString method.
      */
     @Test
-    public void testCDToString() {
+    void testCDToString() {
         CD cd = new CD("Greatest Hits", "The Beatles", "CD001");
         String result = cd.toString();
         
@@ -93,7 +93,7 @@ public class CDTest {
      * Test default constructor creates available CD.
      */
     @Test
-    public void testDefaultConstructor() {
+    void testDefaultConstructor() {
         CD cd = new CD();
         assertTrue(cd.isAvailable(), "Default constructor should create available CD");
     }
@@ -102,7 +102,7 @@ public class CDTest {
      * Test CD implements LibraryItem interface.
      */
     @Test
-    public void testCDImplementsLibraryItem() {
+    void testCDImplementsLibraryItem() {
         CD cd = new CD("Test CD", "Test Artist", "CD001");
         
         assertTrue(cd instanceof LibraryItem, "CD should implement LibraryItem");
@@ -115,7 +115,7 @@ public class CDTest {
      * Test CD loan period is 7 days (US5.1).
      */
     @Test
-    public void testCDLoanPeriodIs7Days() {
+    void testCDLoanPeriodIs7Days() {
         CD cd = new CD("Test CD", "Test Artist", "CD001");
         
         assertEquals(7, cd.getLoanPeriodDays(), "US5.1: CDs should be borrowed for 7 days");
@@ -125,7 +125,7 @@ public class CDTest {
      * Test CD unique identifier is catalog number.
      */
     @Test
-    public void testCDUniqueIdentifier() {
+    void testCDUniqueIdentifier() {
         CD cd = new CD("Test CD", "Test Artist", "CD123");
         
         assertEquals("CD123", cd.getUniqueIdentifier());

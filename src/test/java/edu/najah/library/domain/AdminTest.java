@@ -15,7 +15,7 @@ public class AdminTest {
      * Test creating an admin with constructor.
      */
     @Test
-    public void testAdminCreation() {
+    void testAdminCreation() {
         Admin admin = new Admin("admin", "password123");
         
         assertEquals("admin", admin.getUsername());
@@ -26,7 +26,7 @@ public class AdminTest {
      * Test admin setters.
      */
     @Test
-    public void testAdminSetters() {
+    void testAdminSetters() {
         Admin admin = new Admin();
         admin.setUsername("newadmin");
         admin.setPassword("newpass");
@@ -39,7 +39,7 @@ public class AdminTest {
      * Test admin equality based on username.
      */
     @Test
-    public void testAdminEquality() {
+    void testAdminEquality() {
         Admin admin1 = new Admin("admin", "pass1");
         Admin admin2 = new Admin("admin", "pass2");
         Admin admin3 = new Admin("different", "pass1");
@@ -52,7 +52,7 @@ public class AdminTest {
      * Test admin hash code consistency.
      */
     @Test
-    public void testAdminHashCode() {
+    void testAdminHashCode() {
         Admin admin1 = new Admin("admin", "pass");
         Admin admin2 = new Admin("admin", "differentpass");
         
@@ -64,7 +64,7 @@ public class AdminTest {
      * Test admin toString method.
      */
     @Test
-    public void testAdminToString() {
+    void testAdminToString() {
         Admin admin = new Admin("admin", "password");
         String result = admin.toString();
         

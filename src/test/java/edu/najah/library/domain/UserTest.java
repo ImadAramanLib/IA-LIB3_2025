@@ -16,12 +16,12 @@ public class UserTest {
     private User user;
     
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         user = new User("U001", "John Doe", "john@example.com");
     }
     
     @Test
-    public void testUserCreation() {
+    void testUserCreation() {
         assertNotNull(user);
         assertEquals("U001", user.getUserId());
         assertEquals("John Doe", user.getName());
@@ -29,13 +29,13 @@ public class UserTest {
     }
     
     @Test
-    public void testDefaultConstructor() {
+    void testDefaultConstructor() {
         User defaultUser = new User();
         assertNotNull(defaultUser);
     }
     
     @Test
-    public void testSettersAndGetters() {
+    void testSettersAndGetters() {
         user.setUserId("U002");
         user.setName("Jane Smith");
         user.setEmail("jane@example.com");
@@ -46,7 +46,7 @@ public class UserTest {
     }
     
     @Test
-    public void testEquality() {
+    void testEquality() {
         User user2 = new User("U001", "Different Name", "different@example.com");
         
         // Users with same ID should be equal
@@ -54,7 +54,7 @@ public class UserTest {
     }
     
     @Test
-    public void testInequality() {
+    void testInequality() {
         User user2 = new User("U002", "John Doe", "john@example.com");
         
         // Users with different IDs should not be equal
@@ -62,7 +62,7 @@ public class UserTest {
     }
     
     @Test
-    public void testHashCode() {
+    void testHashCode() {
         User user2 = new User("U001", "John Doe", "john@example.com");
         
         // Users with same ID should have same hash code
@@ -70,7 +70,7 @@ public class UserTest {
     }
     
     @Test
-    public void testToString() {
+    void testToString() {
         String toString = user.toString();
         
         assertNotNull(toString);

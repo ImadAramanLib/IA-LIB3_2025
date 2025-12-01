@@ -15,7 +15,7 @@ public class BookTest {
      * Test creating a book with constructor.
      */
     @Test
-    public void testBookCreation() {
+    void testBookCreation() {
         Book book = new Book("Clean Code", "Robert Martin", "978-0132350884");
         
         assertEquals("Clean Code", book.getTitle());
@@ -28,7 +28,7 @@ public class BookTest {
      * Test book creation with availability parameter.
      */
     @Test
-    public void testBookCreationWithAvailability() {
+    void testBookCreationWithAvailability() {
         Book book = new Book("Java Programming", "John Doe", "123456789", false);
         
         assertFalse(book.isAvailable(), "Book should be unavailable as specified");
@@ -38,7 +38,7 @@ public class BookTest {
      * Test book setters.
      */
     @Test
-    public void testBookSetters() {
+    void testBookSetters() {
         Book book = new Book();
         book.setTitle("Design Patterns");
         book.setAuthor("Gang of Four");
@@ -55,7 +55,7 @@ public class BookTest {
      * Test book equality based on ISBN.
      */
     @Test
-    public void testBookEquality() {
+    void testBookEquality() {
         Book book1 = new Book("Title1", "Author1", "12345");
         Book book2 = new Book("Title2", "Author2", "12345");
         Book book3 = new Book("Title1", "Author1", "67890");
@@ -68,7 +68,7 @@ public class BookTest {
      * Test book hash code consistency.
      */
     @Test
-    public void testBookHashCode() {
+    void testBookHashCode() {
         Book book1 = new Book("Title1", "Author1", "12345");
         Book book2 = new Book("Different Title", "Different Author", "12345");
         
@@ -80,7 +80,7 @@ public class BookTest {
      * Test book toString method.
      */
     @Test
-    public void testBookToString() {
+    void testBookToString() {
         Book book = new Book("Clean Code", "Robert Martin", "978-0132350884");
         String result = book.toString();
         
@@ -93,7 +93,7 @@ public class BookTest {
      * Test default constructor creates available book.
      */
     @Test
-    public void testDefaultConstructor() {
+    void testDefaultConstructor() {
         Book book = new Book();
         assertTrue(book.isAvailable(), "Default constructor should create available book");
     }

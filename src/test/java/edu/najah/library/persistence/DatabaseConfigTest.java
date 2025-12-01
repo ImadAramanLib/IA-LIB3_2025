@@ -17,7 +17,7 @@ public class DatabaseConfigTest {
     
     @Test
     @DisplayName("DatabaseConfig: can be instantiated and has static methods")
-    public void testDatabaseConfigClass() {
+    void testDatabaseConfigClass() {
         // Test that the class exists and can be accessed
         assertNotNull(DatabaseConfig.class);
         
@@ -27,7 +27,7 @@ public class DatabaseConfigTest {
     
     @Test
     @DisplayName("DatabaseConfig: getEntityManagerFactory returns null without credentials")
-    public void testGetEntityManagerFactoryWithoutCredentials() {
+    void testGetEntityManagerFactoryWithoutCredentials() {
         // When environment variables are not set, should return null
         EntityManagerFactory emf = DatabaseConfig.getEntityManagerFactory();
         
@@ -39,7 +39,7 @@ public class DatabaseConfigTest {
     
     @Test
     @DisplayName("DatabaseConfig: getEntityManagerFactory accepts connection parameters")
-    public void testGetEntityManagerFactoryWithParameters() {
+    void testGetEntityManagerFactoryWithParameters() {
         // Test that the method can accept parameters (even with dummy values)
         // Note: This will fail if actually trying to connect, but tests the method signature
         String testUrl = "jdbc:postgresql://test-host:5432/test-db?sslmode=require";
@@ -64,14 +64,14 @@ public class DatabaseConfigTest {
     
     @Test
     @DisplayName("DatabaseConfig: closeEntityManagerFactory handles null factory gracefully")
-    public void testCloseEntityManagerFactoryWithNull() {
+    void testCloseEntityManagerFactoryWithNull() {
         // Should not throw exception even if factory is null
         assertDoesNotThrow(() -> DatabaseConfig.closeEntityManagerFactory());
     }
     
     @Test
     @DisplayName("DatabaseConfig: persistence unit name is correct")
-    public void testPersistenceUnitName() {
+    void testPersistenceUnitName() {
         // Verify the persistence unit name constant exists
         // This is tested indirectly through the methods
         assertTrue(true); // Placeholder - actual verification would require reflection

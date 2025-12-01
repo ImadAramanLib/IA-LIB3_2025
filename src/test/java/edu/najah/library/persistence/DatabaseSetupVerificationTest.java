@@ -19,7 +19,7 @@ public class DatabaseSetupVerificationTest {
     
     @Test
     @DisplayName("Verify persistence.xml exists in resources")
-    public void testPersistenceXmlExists() {
+    void testPersistenceXmlExists() {
         // Check if persistence.xml exists in the classpath
         InputStream persistenceXml = this.getClass()
                 .getClassLoader()
@@ -30,7 +30,7 @@ public class DatabaseSetupVerificationTest {
     
     @Test
     @DisplayName("Verify database.properties.example exists")
-    public void testDatabasePropertiesExampleExists() {
+    void testDatabasePropertiesExampleExists() {
         // Check if database.properties.example exists
         InputStream propsExample = this.getClass()
                 .getClassLoader()
@@ -41,14 +41,14 @@ public class DatabaseSetupVerificationTest {
     
     @Test
     @DisplayName("Verify DatabaseConfig class exists and is accessible")
-    public void testDatabaseConfigClassExists() {
+    void testDatabaseConfigClassExists() {
         assertNotNull(DatabaseConfig.class);
         assertTrue(DatabaseConfig.class.getName().equals("edu.najah.library.persistence.DatabaseConfig"));
     }
     
     @Test
     @DisplayName("Verify DatabaseConfig has required methods")
-    public void testDatabaseConfigMethods() {
+    void testDatabaseConfigMethods() {
         // Verify static methods exist by checking they can be called
         assertDoesNotThrow(() -> DatabaseConfig.isInitialized());
         assertDoesNotThrow(() -> DatabaseConfig.closeEntityManagerFactory());

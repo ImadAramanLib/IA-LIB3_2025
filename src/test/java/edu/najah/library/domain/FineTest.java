@@ -19,13 +19,13 @@ public class FineTest {
     private User user;
     
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         user = new User("U001", "John Doe", "john@example.com");
         fine = new Fine(user, 5.0, LocalDate.of(2025, 1, 1));
     }
     
     @Test
-    public void testFineCreation() {
+    void testFineCreation() {
         assertNotNull(fine);
         assertEquals(user, fine.getUser());
         assertEquals(5.0, fine.getAmount());
@@ -34,14 +34,14 @@ public class FineTest {
     }
     
     @Test
-    public void testDefaultConstructor() {
+    void testDefaultConstructor() {
         Fine defaultFine = new Fine();
         assertNotNull(defaultFine);
         assertFalse(defaultFine.isPaid());
     }
     
     @Test
-    public void testPayFinePartial() {
+    void testPayFinePartial() {
         double remaining = fine.payFine(2.0);
         
         assertEquals(3.0, remaining);
@@ -50,7 +50,7 @@ public class FineTest {
     }
     
     @Test
-    public void testPayFineFull() {
+    void testPayFineFull() {
         double remaining = fine.payFine(5.0);
         
         assertEquals(0, remaining);
@@ -59,7 +59,7 @@ public class FineTest {
     }
     
     @Test
-    public void testPayFineOver() {
+    void testPayFineOver() {
         double remaining = fine.payFine(10.0);
         
         assertEquals(0, remaining);
@@ -68,19 +68,19 @@ public class FineTest {
     }
     
     @Test
-    public void testPayFineNegative() {
+    void testPayFineNegative() {
         assertThrows(IllegalArgumentException.class, () -> fine.payFine(-1.0));
     }
     
     @Test
-    public void testGetRemainingBalance() {
+    void testGetRemainingBalance() {
         assertEquals(5.0, fine.getRemainingBalance());
         fine.payFine(2.0);
         assertEquals(3.0, fine.getRemainingBalance());
     }
     
     @Test
-    public void testSettersAndGetters() {
+    void testSettersAndGetters() {
         User newUser = new User("U002", "Jane Doe", "jane@example.com");
         LocalDate newDate = LocalDate.of(2025, 2, 1);
         
@@ -96,7 +96,7 @@ public class FineTest {
     }
     
     @Test
-    public void testCalculateFineAmount() {
+    void testCalculateFineAmount() {
         // $0.50 per day
         assertEquals(1.0, Fine.calculateFineAmount(2));
         assertEquals(2.5, Fine.calculateFineAmount(5));
@@ -104,7 +104,7 @@ public class FineTest {
     }
     
     @Test
-    public void testToString() {
+    void testToString() {
         String toString = fine.toString();
         
         assertNotNull(toString);

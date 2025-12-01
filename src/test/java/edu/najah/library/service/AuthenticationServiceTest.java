@@ -21,7 +21,7 @@ public class AuthenticationServiceTest {
      * Set up test fixtures before each test.
      */
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         authService = new AuthenticationService();
         testAdmin = new Admin("admin", "password123");
         authService.registerAdmin(testAdmin);
@@ -31,7 +31,7 @@ public class AuthenticationServiceTest {
      * Test US1.1: Valid credentials should result in successful login.
      */
     @Test
-    public void testLoginWithValidCredentials() {
+    void testLoginWithValidCredentials() {
         boolean result = authService.login("admin", "password123");
         
         assertTrue(result, "Login with valid credentials should return true");
@@ -43,7 +43,7 @@ public class AuthenticationServiceTest {
      * Test US1.1: Invalid username should result in failed login.
      */
     @Test
-    public void testLoginWithInvalidUsername() {
+    void testLoginWithInvalidUsername() {
         boolean result = authService.login("wronguser", "password123");
         
         assertFalse(result, "Login with invalid username should return false");
@@ -55,7 +55,7 @@ public class AuthenticationServiceTest {
      * Test US1.1: Invalid password should result in failed login.
      */
     @Test
-    public void testLoginWithInvalidPassword() {
+    void testLoginWithInvalidPassword() {
         boolean result = authService.login("admin", "wrongpassword");
         
         assertFalse(result, "Login with invalid password should return false");
@@ -66,7 +66,7 @@ public class AuthenticationServiceTest {
      * Test US1.1: Null credentials should result in failed login.
      */
     @Test
-    public void testLoginWithNullCredentials() {
+    void testLoginWithNullCredentials() {
         assertFalse(authService.login(null, "password"), "Null username should fail");
         assertFalse(authService.login("admin", null), "Null password should fail");
         assertFalse(authService.login(null, null), "Null credentials should fail");
@@ -76,7 +76,7 @@ public class AuthenticationServiceTest {
      * Test US1.2: Logout should clear the session.
      */
     @Test
-    public void testLogout() {
+    void testLogout() {
         // First login
         authService.login("admin", "password123");
         assertTrue(authService.isLoggedIn(), "Admin should be logged in");
@@ -92,7 +92,7 @@ public class AuthenticationServiceTest {
      * Test US1.2: After logout, admin actions should require re-login.
      */
     @Test
-    public void testRequiresReloginAfterLogout() {
+    void testRequiresReloginAfterLogout() {
         // Login
         authService.login("admin", "password123");
         assertFalse(authService.requiresLogin(), "Should not require login when logged in");
@@ -110,7 +110,7 @@ public class AuthenticationServiceTest {
      * Test initial state: no admin should be logged in.
      */
     @Test
-    public void testInitialState() {
+    void testInitialState() {
         AuthenticationService newService = new AuthenticationService();
         
         assertFalse(newService.isLoggedIn(), "No admin should be logged in initially");
@@ -122,7 +122,7 @@ public class AuthenticationServiceTest {
      * Test registering an admin.
      */
     @Test
-    public void testRegisterAdmin() {
+    void testRegisterAdmin() {
         AuthenticationService newService = new AuthenticationService();
         Admin newAdmin = new Admin("newadmin", "newpass");
         
@@ -136,7 +136,7 @@ public class AuthenticationServiceTest {
      * Test registering null admin should not cause error.
      */
     @Test
-    public void testRegisterNullAdmin() {
+    void testRegisterNullAdmin() {
         assertDoesNotThrow(() -> authService.registerAdmin(null), 
                 "Registering null admin should not throw exception");
     }
@@ -145,7 +145,7 @@ public class AuthenticationServiceTest {
      * Test multiple login attempts.
      */
     @Test
-    public void testMultipleLoginAttempts() {
+    void testMultipleLoginAttempts() {
         assertFalse(authService.login("admin", "wrong1"), "First wrong attempt");
         assertFalse(authService.login("admin", "wrong2"), "Second wrong attempt");
         assertTrue(authService.login("admin", "password123"), "Correct credentials");

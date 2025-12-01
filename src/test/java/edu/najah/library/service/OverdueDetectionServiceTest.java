@@ -28,7 +28,7 @@ public class OverdueDetectionServiceTest {
     private LocalDate borrowDate;
     
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         borrowingService = new BorrowingService();
         overdueService = new OverdueDetectionService(borrowingService);
         book = new Book("Test Book", "Test Author", "ISBN123");
@@ -37,7 +37,7 @@ public class OverdueDetectionServiceTest {
     }
     
     @Test
-    public void testGetOverdueLoansNone() {
+    void testGetOverdueLoansNone() {
         Loan loan = borrowingService.borrowBook(user, book, borrowDate);
         LocalDate currentDate = borrowDate.plusDays(20);
         
@@ -47,7 +47,7 @@ public class OverdueDetectionServiceTest {
     }
     
     @Test
-    public void testGetOverdueLoans() {
+    void testGetOverdueLoans() {
         Loan loan = borrowingService.borrowBook(user, book, borrowDate);
         LocalDate currentDate = borrowDate.plusDays(30);
         
@@ -58,7 +58,7 @@ public class OverdueDetectionServiceTest {
     }
     
     @Test
-    public void testGetOverdueLoansForUser() {
+    void testGetOverdueLoansForUser() {
         Loan loan = borrowingService.borrowBook(user, book, borrowDate);
         LocalDate currentDate = borrowDate.plusDays(30);
         
@@ -69,7 +69,7 @@ public class OverdueDetectionServiceTest {
     }
     
     @Test
-    public void testGetOverdueLoansForUserNone() {
+    void testGetOverdueLoansForUserNone() {
         User otherUser = new User("U002", "Jane Doe", "jane@example.com");
         Loan loan = borrowingService.borrowBook(user, book, borrowDate);
         LocalDate currentDate = borrowDate.plusDays(30);
@@ -80,7 +80,7 @@ public class OverdueDetectionServiceTest {
     }
     
     @Test
-    public void testCalculateOverdueFine() {
+    void testCalculateOverdueFine() {
         Loan loan = borrowingService.borrowBook(user, book, borrowDate);
         LocalDate currentDate = borrowDate.plusDays(32); // 4 days overdue
         
@@ -91,7 +91,7 @@ public class OverdueDetectionServiceTest {
     }
     
     @Test
-    public void testCalculateOverdueFineNotOverdue() {
+    void testCalculateOverdueFineNotOverdue() {
         Loan loan = borrowingService.borrowBook(user, book, borrowDate);
         LocalDate currentDate = borrowDate.plusDays(20);
         
@@ -101,7 +101,7 @@ public class OverdueDetectionServiceTest {
     }
     
     @Test
-    public void testIsOverdue() {
+    void testIsOverdue() {
         Loan loan = borrowingService.borrowBook(user, book, borrowDate);
         LocalDate currentDate = borrowDate.plusDays(30);
         
@@ -109,7 +109,7 @@ public class OverdueDetectionServiceTest {
     }
     
     @Test
-    public void testIsOverdueNotOverdue() {
+    void testIsOverdueNotOverdue() {
         Loan loan = borrowingService.borrowBook(user, book, borrowDate);
         LocalDate currentDate = borrowDate.plusDays(20);
         
@@ -117,7 +117,7 @@ public class OverdueDetectionServiceTest {
     }
     
     @Test
-    public void testGetDaysOverdue() {
+    void testGetDaysOverdue() {
         Loan loan = borrowingService.borrowBook(user, book, borrowDate);
         LocalDate currentDate = borrowDate.plusDays(32);
         
@@ -127,7 +127,7 @@ public class OverdueDetectionServiceTest {
     }
     
     @Test
-    public void testGetDaysOverdueNotOverdue() {
+    void testGetDaysOverdueNotOverdue() {
         Loan loan = borrowingService.borrowBook(user, book, borrowDate);
         LocalDate currentDate = borrowDate.plusDays(20);
         
@@ -137,7 +137,7 @@ public class OverdueDetectionServiceTest {
     }
     
     @Test
-    public void testMultipleOverdueLoans() {
+    void testMultipleOverdueLoans() {
         Loan loan1 = borrowingService.borrowBook(user, book, borrowDate);
         Book book2 = new Book("Another Book", "Another Author", "ISBN456");
         Loan loan2 = borrowingService.borrowBook(user, book2, borrowDate);
