@@ -34,6 +34,7 @@ public class DatabaseConfigTest {
         // This will be null if environment variables are not set
         // We expect null since we don't have real credentials in test environment
         // This is actually the expected behavior - the method should handle missing credentials gracefully
+        assertTrue(emf == null || !emf.isOpen(), "EntityManagerFactory should be null or closed when credentials are missing");
     }
     
     @Test

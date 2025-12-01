@@ -147,8 +147,7 @@ public class BranchCoverageTest {
     @Test
     @DisplayName("BorrowingService: returnItem with null loan does nothing")
     public void testReturnItemNullLoan() {
-        borrowingService.returnItem(null, borrowDate);
-        // Should not throw exception
+        assertDoesNotThrow(() -> borrowingService.returnItem(null, borrowDate));
     }
     
     @Test
@@ -186,16 +185,15 @@ public class BranchCoverageTest {
     @Test
     @DisplayName("BorrowingService: returnBook with null loan does nothing")
     public void testReturnBookNullLoan() {
-        borrowingService.returnBook(null, borrowDate);
-        // Should not throw exception
+        assertDoesNotThrow(() -> borrowingService.returnBook(null, borrowDate));
     }
     
     @Test
     @DisplayName("BorrowingService: returnBook with null returnDate does nothing")
     public void testReturnBookNullReturnDate() {
         Loan loan = borrowingService.borrowBook(user, book, borrowDate);
-        borrowingService.returnBook(loan, null);
-        // Should not throw exception
+        assertDoesNotThrow(() -> borrowingService.returnBook(loan, null));
+        assertNull(loan.getReturnDate());
     }
     
     @Test
@@ -537,8 +535,7 @@ public class BranchCoverageTest {
     @DisplayName("NotificationService: attach with null observer does nothing")
     public void testAttachNullObserver() {
         NotificationService notificationService = new NotificationService(overdueService);
-        notificationService.attach(null);
-        // Should not throw exception
+        assertDoesNotThrow(() -> notificationService.attach(null));
     }
     
     @Test
@@ -557,10 +554,7 @@ public class BranchCoverageTest {
             }
         };
         notificationService.attach(observer);
-        notificationService.attach(observer); // Try to attach again
-        
-        // Should only have one observer
-        // We can't directly check, but it shouldn't throw an exception
+        assertDoesNotThrow(() -> notificationService.attach(observer)); // Try to attach again
     }
 }
 

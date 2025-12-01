@@ -98,7 +98,7 @@ public class LibraryGUI extends JFrame {
     private DefaultTableModel finesTableModel;
     
     // User Management (Admin only)
-    private JTextField userIdField, userNameField, userEmailField, userUsernameField;
+    private JTextField userIdField, userFullNameField, userEmailField, userUsernameField;
     private JPasswordField userPasswordField;
     private JButton registerUserButton, unregisterUserButton;
     private JTable usersTable;
@@ -642,8 +642,8 @@ public class LibraryGUI extends JFrame {
         inputPanel.add(userPasswordField);
         
         inputPanel.add(new JLabel("Name:"));
-        userNameField = new JTextField();
-        inputPanel.add(userNameField);
+        userFullNameField = new JTextField();
+        inputPanel.add(userFullNameField);
         
         inputPanel.add(new JLabel("Email:"));
         userEmailField = new JTextField();
@@ -1118,7 +1118,7 @@ public class LibraryGUI extends JFrame {
             String userId = userIdField.getText().trim();
             String username = userUsernameField.getText().trim();
             String password = new String(userPasswordField.getPassword());
-            String name = userNameField.getText().trim();
+            String name = userFullNameField.getText().trim();
             String email = userEmailField.getText().trim();
             
             if (userId.isEmpty() || username.isEmpty() || password.isEmpty() || name.isEmpty() || email.isEmpty()) {
@@ -1150,7 +1150,7 @@ public class LibraryGUI extends JFrame {
                 userIdField.setText("");
                 userUsernameField.setText("");
                 userPasswordField.setText("");
-                userNameField.setText("");
+                userFullNameField.setText("");
                 userEmailField.setText("");
                 refreshUsersTable();
                 statusLabel.setText("User registered: " + name + " (Username: " + username + ")");
@@ -1191,7 +1191,7 @@ public class LibraryGUI extends JFrame {
                 userIdField.setText("");
                 userUsernameField.setText("");
                 userPasswordField.setText("");
-                userNameField.setText("");
+                userFullNameField.setText("");
                 userEmailField.setText("");
                 refreshUsersTable();
                 statusLabel.setText("User unregistered: " + userId);
