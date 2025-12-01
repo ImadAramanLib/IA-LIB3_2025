@@ -4,11 +4,14 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.logging.Logger;
 
 /**
  * Simple JDBC test to verify Neon database connection
  */
 public class DatabaseTest {
+    
+    private static final Logger logger = Logger.getLogger(DatabaseTest.class.getName());
     
     private static final String URL = "jdbc:postgresql://ep-red-sun-agapswm0-pooler.c-2.eu-central-1.aws.neon.tech:5432/neondb?sslmode=require";
     private static final String USER = "neondb_owner";
@@ -17,20 +20,19 @@ public class DatabaseTest {
         String password = System.getenv("DB_PASSWORD");
         
         if (password == null || password.isEmpty()) {
-            System.out.println("ERROR: DB_PASSWORD environment variable not set!");
+            logger.severe("ERROR: DB_PASSWORD environment variable not set!");
             System.exit(1);
         }
         
-        System.out.println("Testing Neon PostgreSQL Connection...");
-        System.out.println("URL: " + URL);
-        System.out.println("User: " + USER);
-        System.out.println();
+        logger.info("Testing Neon PostgreSQL Connection...");
+        logger.info("URL: " + URL);
+        logger.info("User: " + USER);
         
         try {
-            System.out.println("Loading PostgreSQL driver...");
+            logger.info("Loading PostgreSQL driver...");
             Class.forName("org.postgresql.Driver");
             
-            System.out.println("Attempting connection (timeout 10 seconds)...");
+            logger.info("Attempting connection (timeout 10 seconds)...");
             
             // Set connection timeout
             java.util.Properties props = new java.util.Properties();
@@ -41,21 +43,19 @@ public class DatabaseTest {
             
             Connection conn = DriverManager.getConnection(URL, props);
             
-            System.out.println("✅ CONNECTION SUCCESSFUL!");
-            System.out.println();
+            logger.info("✅ CONNECTION SUCCESSFUL!");
             
             // Test query
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT version()");
             if (rs.next()) {
-                System.out.println("PostgreSQL Version: " + rs.getString(1));
+                logger.info("PostgreSQL Version: " + rs.getString(1));
             }
             rs.close();
             stmt.close();
             
             // Create admins table if not exists
-            System.out.println();
-            System.out.println("Creating 'admins' table if not exists...");
+            logger.info("Creating 'admins' table if not exists...");
             stmt = conn.createStatement();
             stmt.executeUpdate(
                 "CREATE TABLE IF NOT EXISTS admins (" +
@@ -65,17 +65,16 @@ public class DatabaseTest {
                 "  email VARCHAR(255)" +
                 ")"
             );
-            System.out.println("✅ Table created/verified!");
+            logger.info("✅ Table created/verified!");
             stmt.close();
             
             conn.close();
-            System.out.println();
-            System.out.println("✅ ALL TESTS PASSED - Database is working!");
+            logger.info("✅ ALL TESTS PASSED - Database is working!");
             
         } catch (Exception e) {
-            System.out.println("❌ CONNECTION FAILED!");
-            System.out.println("Error: " + e.getMessage());
-            e.printStackTrace();
+            logger.severe("❌ CONNECTION FAILED!");
+            logger.severe("Error: " + e.getMessage());
+            logger.log(java.util.logging.Level.SEVERE, "Exception details", e);
         }
     }
 }

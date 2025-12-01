@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * Database configuration for connecting to Neon PostgreSQL database
@@ -15,6 +16,8 @@ import java.util.Map;
  * @version 1.0
  */
 public class DatabaseConfig {
+    
+    private static final Logger logger = Logger.getLogger(DatabaseConfig.class.getName());
     
     private static EntityManagerFactory emf;
     private static final String DB_URL_ENV = "NEON_DB_URL";
@@ -57,15 +60,15 @@ public class DatabaseConfig {
             // If still not set, use default values (hardcoded for convenience)
             if (dbUrl == null || dbUrl.trim().isEmpty()) {
                 dbUrl = "jdbc:postgresql://ep-red-sun-agapswm0-pooler.c-2.eu-central-1.aws.neon.tech:5432/neondb?sslmode=require";
-                System.out.println("ℹ️  Using default database URL (environment variable not set)");
+                logger.info("ℹ️  Using default database URL (environment variable not set)");
             }
             if (dbUser == null || dbUser.trim().isEmpty()) {
                 dbUser = "neondb_owner";
-                System.out.println("ℹ️  Using default database user (environment variable not set)");
+                logger.info("ℹ️  Using default database user (environment variable not set)");
             }
             if (dbPassword == null || dbPassword.trim().isEmpty()) {
                 dbPassword = "npg_vFeS7Qoi3WuT";
-                System.out.println("ℹ️  Using default database password (environment variable not set)");
+                logger.info("ℹ️  Using default database password (environment variable not set)");
             }
             
             // Create properties map with connection details
@@ -76,11 +79,11 @@ public class DatabaseConfig {
             
             // Initialize the EntityManagerFactory from persistence.xml with properties
             emf = Persistence.createEntityManagerFactory("NeonLibraryPU", properties);
-            System.out.println("✅ Database connection successful!");
+            logger.info("✅ Database connection successful!");
             return true;
         } catch (Exception e) {
-            System.err.println("❌ Failed to initialize EntityManagerFactory:");
-            e.printStackTrace();
+            logger.severe("❌ Failed to initialize EntityManagerFactory:");
+            logger.log(java.util.logging.Level.SEVERE, "Exception details", e);
             emf = null;
             return false;
         }

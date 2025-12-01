@@ -8,6 +8,7 @@ import jakarta.persistence.EntityTransaction;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Logger;
 
 /**
  * Script to populate the database with initial admin and users.
@@ -29,6 +30,8 @@ import java.util.Random;
  */
 public class PopulateDatabase {
     
+    private static final Logger logger = Logger.getLogger(PopulateDatabase.class.getName());
+    
     private static final String[] FIRST_NAMES = {
         "Emma", "Liam", "Olivia", "Noah", "Ava", "Ethan", "Sophia", "Mason",
         "Isabella", "James", "Mia", "Benjamin", "Charlotte", "Lucas", "Amelia",
@@ -47,92 +50,82 @@ public class PopulateDatabase {
     };
     
     public static void main(String[] args) {
-        System.out.println("=== Populating Database ===");
-        System.out.println();
+        logger.info("=== Populating Database ===");
         
         EntityManager em = DatabaseConfig.createEntityManager();
         
         if (em == null) {
-            System.err.println("ERROR: Could not create EntityManager.");
-            System.err.println("Please check your environment variables:");
-            System.err.println("  - NEON_DB_URL");
-            System.err.println("  - NEON_DB_USER");
-            System.err.println("  - NEON_DB_PASSWORD");
+            logger.severe("ERROR: Could not create EntityManager.");
+            logger.severe("Please check your environment variables:");
+            logger.severe("  - NEON_DB_URL");
+            logger.severe("  - NEON_DB_USER");
+            logger.severe("  - NEON_DB_PASSWORD");
             return;
         }
         
-        System.out.println("✓ Successfully connected to database!");
-        System.out.println();
+        logger.info("✓ Successfully connected to database!");
         
         EntityTransaction transaction = em.getTransaction();
         Random random = new Random();
         
         try {
             transaction.begin();
-            System.out.println("Transaction started...");
-            System.out.println();
+            logger.info("Transaction started...");
             
             // Add Admin
-            System.out.println("Adding Admin...");
+            logger.info("Adding Admin...");
             Admin admin = new Admin("ImadAR", "ImadImad119");
             em.persist(admin);
-            System.out.println("✓ Admin added: " + admin.getUsername());
-            System.out.println();
+            logger.info("✓ Admin added: " + admin.getUsername());
             
             // Add random users
-            System.out.println("Adding random users...");
+            logger.info("Adding random users...");
             List<User> users = generateRandomUsers(5, random);
             for (User user : users) {
                 em.persist(user);
-                System.out.println("✓ User added: " + user.getName() + " (" + user.getUserId() + ") - " + user.getEmail());
+                logger.info("✓ User added: " + user.getName() + " (" + user.getUserId() + ") - " + user.getEmail());
             }
-            System.out.println();
             
             // Commit the transaction
             transaction.commit();
-            System.out.println("✓ All data saved to database successfully!");
-            System.out.println();
+            logger.info("✓ All data saved to database successfully!");
             
             // Verify by querying
-            System.out.println("Verifying saved data...");
-            System.out.println();
+            logger.info("Verifying saved data...");
             
             // Query admin
             Admin savedAdmin = em.createQuery(
                 "SELECT a FROM Admin a WHERE a.username = :username", Admin.class)
                 .setParameter("username", "ImadAR")
                 .getSingleResult();
-            System.out.println("✓ Admin verified: " + savedAdmin.getUsername() + " (ID: " + savedAdmin.getId() + ")");
+            logger.info("✓ Admin verified: " + savedAdmin.getUsername() + " (ID: " + savedAdmin.getId() + ")");
             
             // Query users
             List<User> allUsers = em.createQuery("SELECT u FROM User u", User.class).getResultList();
-            System.out.println("✓ Users verified: " + allUsers.size() + " user(s) in database");
+            logger.info("✓ Users verified: " + allUsers.size() + " user(s) in database");
             for (User user : allUsers) {
-                System.out.println("  - " + user.getName() + " (" + user.getUserId() + ") - " + user.getEmail());
+                logger.info("  - " + user.getName() + " (" + user.getUserId() + ") - " + user.getEmail());
             }
             
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();
-                System.err.println("Transaction rolled back due to error.");
+                logger.severe("Transaction rolled back due to error.");
             }
-            System.err.println("ERROR: " + e.getMessage());
-            e.printStackTrace();
+            logger.severe("ERROR: " + e.getMessage());
+            logger.log(java.util.logging.Level.SEVERE, "Exception details", e);
         } finally {
             em.close();
-            System.out.println();
-            System.out.println("Database connection closed.");
+            logger.info("Database connection closed.");
         }
         
-        System.out.println();
-        System.out.println("=== Population Complete ===");
-        System.out.println();
-        System.out.println("To verify in Neon Console:");
-        System.out.println("1. Go to https://console.neon.tech");
-        System.out.println("2. Click on your project");
-        System.out.println("3. Click on 'SQL Editor' tab");
-        System.out.println("4. Run: SELECT * FROM admins;");
-        System.out.println("5. Run: SELECT * FROM users;");
+        logger.info("=== Population Complete ===");
+        logger.info("To verify in Neon Console:");
+        logger.info("1. Go to https://console.neon.tech");
+        logger.info("2. Click on your project");
+        logger.info("3. Click on 'SQL Editor' tab");
+        logger.info("4. Run: SELECT * FROM admins;");
+        logger.info("5. Run: SELECT * FROM users;");
     }
     
     /**
