@@ -31,17 +31,17 @@ import java.util.HashSet;
 public class LibraryGUI extends JFrame {
     
     // Database
-    private DatabaseService databaseService;
-    private jakarta.persistence.EntityManager entityManager;
+    private transient DatabaseService databaseService;
+    private transient jakarta.persistence.EntityManager entityManager;
     
     // Services
-    private AuthenticationService authService;
-    private LibraryService libraryService;
-    private BorrowingService borrowingService;
-    private OverdueDetectionService overdueService;
-    private ReminderService reminderService;
-    private UserService userService;
-    private MockEmailServer emailServer;
+    private transient AuthenticationService authService;
+    private transient LibraryService libraryService;
+    private transient BorrowingService borrowingService;
+    private transient OverdueDetectionService overdueService;
+    private transient ReminderService reminderService;
+    private transient UserService userService;
+    private transient MockEmailServer emailServer;
     
     // Current user info
     private String currentUsername;
