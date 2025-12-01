@@ -36,12 +36,24 @@ public class BorrowingServiceTest {
     
     @Test
     void testBorrowBookSuccess() {
+        book.setQuantity(3); // Set initial quantity
         Loan loan = borrowingService.borrowBook(user, book, borrowDate);
         
         assertNotNull(loan);
         assertEquals(user, loan.getUser());
         assertEquals(book, loan.getBook());
-        assertFalse(book.isAvailable());
+        assertEquals(2, book.getQuantity(), "Quantity should be decremented after borrowing");
+        assertTrue(book.isAvailable(), "Book should still be available if quantity > 0");
+    }
+    
+    @Test
+    void testBorrowBookDecrementsQuantityToZero() {
+        book.setQuantity(1); // Only one copy
+        Loan loan = borrowingService.borrowBook(user, book, borrowDate);
+        
+        assertNotNull(loan);
+        assertEquals(0, book.getQuantity(), "Quantity should be 0 after borrowing last copy");
+        assertFalse(book.isAvailable(), "Book should be unavailable when quantity is 0");
     }
     
     @Test
@@ -147,13 +159,30 @@ public class BorrowingServiceTest {
     
     @Test
     void testReturnBook() {
+        book.setQuantity(2);
         Loan loan = borrowingService.borrowBook(user, book, borrowDate);
-        LocalDate returnDate = borrowDate.plusDays(10);
+        assertEquals(1, book.getQuantity(), "Quantity should be 1 after borrowing");
         
+        LocalDate returnDate = borrowDate.plusDays(10);
         borrowingService.returnBook(loan, returnDate);
         
         assertEquals(returnDate, loan.getReturnDate());
-        assertTrue(book.isAvailable());
+        assertEquals(2, book.getQuantity(), "Quantity should be incremented back to 2");
+        assertTrue(book.isAvailable(), "Book should be available when quantity > 0");
+    }
+    
+    @Test
+    void testReturnBookIncrementsQuantityFromZero() {
+        book.setQuantity(1);
+        Loan loan = borrowingService.borrowBook(user, book, borrowDate);
+        assertEquals(0, book.getQuantity(), "Quantity should be 0 after borrowing");
+        assertFalse(book.isAvailable(), "Book should be unavailable");
+        
+        LocalDate returnDate = borrowDate.plusDays(10);
+        borrowingService.returnBook(loan, returnDate);
+        
+        assertEquals(1, book.getQuantity(), "Quantity should be incremented back to 1");
+        assertTrue(book.isAvailable(), "Book should be available again");
     }
     
     @Test

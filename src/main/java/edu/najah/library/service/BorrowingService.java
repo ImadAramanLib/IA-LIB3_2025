@@ -61,7 +61,8 @@ public class BorrowingService {
     
     /**
      * Borrows a book for a user on a specific date.
-     * Book must be available and user must not have unpaid fines or overdue books.
+     * Book must be available (quantity > 0) and user must not have unpaid fines or overdue books.
+     * Decrements the book's quantity when successfully borrowed.
      * 
      * <p>Acceptance Criteria (US4.1):
      * <ul>
@@ -88,7 +89,12 @@ public class BorrowingService {
         
         // Create loan
         Loan loan = new Loan(book, user, borrowDate);
-        book.setAvailable(false);
+        // Decrement quantity when book is borrowed
+        book.decrementQuantity();
+        // If quantity reaches 0, mark as unavailable
+        if (book.getQuantity() == 0) {
+            book.setAvailable(false);
+        }
         loans.add(loan);
         
         return loan;
@@ -161,6 +167,7 @@ public class BorrowingService {
     
     /**
      * Returns a borrowed item (polymorphic method).
+     * For books, increments the quantity when returned.
      * 
      * @param loan the loan to process return for
      * @param returnDate the return date
@@ -173,15 +180,26 @@ public class BorrowingService {
         loan.setReturnDate(returnDate);
         
         LibraryItem item = loan.getItem();
-        if (item != null) {
+        if (item instanceof Book) {
+            Book book = (Book) item;
+            book.incrementQuantity();
+            if (book.getQuantity() > 0) {
+                book.setAvailable(true);
+            }
+        } else if (item != null) {
             item.setAvailable(true);
         } else if (loan.getBook() != null) {
-            loan.getBook().setAvailable(true);
+            Book book = loan.getBook();
+            book.incrementQuantity();
+            if (book.getQuantity() > 0) {
+                book.setAvailable(true);
+            }
         }
     }
     
     /**
      * Returns a borrowed book.
+     * Increments the book's quantity when returned.
      * 
      * @param loan the loan to process return for
      * @param returnDate the return date
@@ -194,7 +212,13 @@ public class BorrowingService {
         loan.setReturnDate(returnDate);
         
         if (loan.getBook() != null) {
-            loan.getBook().setAvailable(true);
+            Book book = loan.getBook();
+            // Increment quantity when book is returned
+            book.incrementQuantity();
+            // Mark as available if quantity > 0
+            if (book.getQuantity() > 0) {
+                book.setAvailable(true);
+            }
         }
     }
     

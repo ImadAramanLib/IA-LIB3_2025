@@ -96,5 +96,121 @@ public class BookTest {
     void testDefaultConstructor() {
         Book book = new Book();
         assertTrue(book.isAvailable(), "Default constructor should create available book");
+        assertEquals(1, book.getQuantity(), "Default constructor should set quantity to 1");
+    }
+    
+    /**
+     * Test quantity getter and setter.
+     */
+    @Test
+    void testQuantityGetterSetter() {
+        Book book = new Book("Test", "Author", "ISBN123");
+        assertEquals(1, book.getQuantity(), "New book should have quantity of 1");
+        
+        book.setQuantity(5);
+        assertEquals(5, book.getQuantity());
+        
+        book.setQuantity(0);
+        assertEquals(0, book.getQuantity());
+    }
+    
+    /**
+     * Test setting negative quantity throws exception.
+     */
+    @Test
+    void testSetNegativeQuantity() {
+        Book book = new Book("Test", "Author", "ISBN123");
+        assertThrows(IllegalArgumentException.class, 
+            () -> book.setQuantity(-1), 
+            "Setting negative quantity should throw exception");
+    }
+    
+    /**
+     * Test increment quantity.
+     */
+    @Test
+    void testIncrementQuantity() {
+        Book book = new Book("Test", "Author", "ISBN123");
+        assertEquals(1, book.getQuantity());
+        
+        book.incrementQuantity();
+        assertEquals(2, book.getQuantity());
+        
+        book.incrementQuantity();
+        assertEquals(3, book.getQuantity());
+    }
+    
+    /**
+     * Test decrement quantity.
+     */
+    @Test
+    void testDecrementQuantity() {
+        Book book = new Book("Test", "Author", "ISBN123");
+        book.setQuantity(3);
+        
+        book.decrementQuantity();
+        assertEquals(2, book.getQuantity());
+        
+        book.decrementQuantity();
+        assertEquals(1, book.getQuantity());
+    }
+    
+    /**
+     * Test decrement quantity when already at 0 throws exception.
+     */
+    @Test
+    void testDecrementQuantityAtZero() {
+        Book book = new Book("Test", "Author", "ISBN123");
+        book.setQuantity(0);
+        
+        assertThrows(IllegalStateException.class, 
+            () -> book.decrementQuantity(), 
+            "Decrementing quantity at 0 should throw exception");
+    }
+    
+    /**
+     * Test isAvailable returns false when quantity is 0.
+     */
+    @Test
+    void testIsAvailableWithZeroQuantity() {
+        Book book = new Book("Test", "Author", "ISBN123");
+        book.setAvailable(true);
+        book.setQuantity(0);
+        
+        assertFalse(book.isAvailable(), "Book with quantity 0 should not be available");
+    }
+    
+    /**
+     * Test isAvailable returns true when quantity > 0 and isAvailable is true.
+     */
+    @Test
+    void testIsAvailableWithQuantity() {
+        Book book = new Book("Test", "Author", "ISBN123");
+        book.setAvailable(true);
+        book.setQuantity(3);
+        
+        assertTrue(book.isAvailable(), "Book with quantity > 0 and available should be available");
+    }
+    
+    /**
+     * Test constructor with quantity parameter.
+     */
+    @Test
+    void testBookConstructorWithQuantity() {
+        Book book = new Book("Test", "Author", "ISBN123", true, 5);
+        assertEquals(5, book.getQuantity());
+        assertTrue(book.isAvailable());
+    }
+    
+    /**
+     * Test toString includes quantity.
+     */
+    @Test
+    void testToStringIncludesQuantity() {
+        Book book = new Book("Test", "Author", "ISBN123");
+        book.setQuantity(3);
+        String result = book.toString();
+        
+        assertTrue(result.contains("quantity=3"), "toString should include quantity");
     }
 }

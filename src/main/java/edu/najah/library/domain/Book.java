@@ -5,7 +5,8 @@ import java.util.Objects;
 
 /**
  * Represents a book in the library management system.
- * Each book has a title, author, ISBN, and availability status.
+ * Each book has a title, author, ISBN, availability status, and quantity.
+ * The quantity field tracks how many copies of this book are available in the library.
  * 
  * <p>This entity is mapped to the "books" table in the database.</p>
  * 
@@ -35,11 +36,16 @@ public class Book implements LibraryItem {
     @Column(name = "is_available", nullable = false)
     private boolean isAvailable;
     
+    @Column(name = "quantity", nullable = false)
+    private int quantity;
+    
     /**
      * Default constructor required by JPA.
+     * Initializes book as available with quantity of 1.
      */
     public Book() {
         this.isAvailable = true; // New books are available by default
+        this.quantity = 1; // Default quantity is 1
     }
     
     /**
@@ -62,7 +68,7 @@ public class Book implements LibraryItem {
     
     /**
      * Constructs a Book with specified details.
-     * Book is available by default.
+     * Book is available by default with quantity of 1.
      * 
      * @param title the book's title
      * @param author the book's author
@@ -73,10 +79,12 @@ public class Book implements LibraryItem {
         this.author = author;
         this.isbn = isbn;
         this.isAvailable = true;
+        this.quantity = 1;
     }
     
     /**
      * Constructs a Book with specified details and availability.
+     * Quantity defaults to 1.
      * 
      * @param title the book's title
      * @param author the book's author
@@ -88,6 +96,24 @@ public class Book implements LibraryItem {
         this.author = author;
         this.isbn = isbn;
         this.isAvailable = isAvailable;
+        this.quantity = 1;
+    }
+    
+    /**
+     * Constructs a Book with specified details, availability, and quantity.
+     * 
+     * @param title the book's title
+     * @param author the book's author
+     * @param isbn the book's ISBN
+     * @param isAvailable the book's availability status
+     * @param quantity the number of copies available
+     */
+    public Book(String title, String author, String isbn, boolean isAvailable, int quantity) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+        this.isAvailable = isAvailable;
+        this.quantity = quantity;
     }
     
     /**
@@ -146,11 +172,12 @@ public class Book implements LibraryItem {
     
     /**
      * Checks if the book is available for borrowing.
+     * A book is available if it is marked as available and has quantity greater than 0.
      * 
-     * @return true if available, false otherwise
+     * @return true if available and quantity > 0, false otherwise
      */
     public boolean isAvailable() {
-        return isAvailable;
+        return isAvailable && quantity > 0;
     }
     
     /**
@@ -160,6 +187,48 @@ public class Book implements LibraryItem {
      */
     public void setAvailable(boolean available) {
         this.isAvailable = available;
+    }
+    
+    /**
+     * Gets the quantity (number of copies) of this book.
+     * 
+     * @return the quantity
+     */
+    public int getQuantity() {
+        return quantity;
+    }
+    
+    /**
+     * Sets the quantity (number of copies) of this book.
+     * 
+     * @param quantity the quantity to set (must be >= 0)
+     */
+    public void setQuantity(int quantity) {
+        if (quantity < 0) {
+            throw new IllegalArgumentException("Quantity cannot be negative");
+        }
+        this.quantity = quantity;
+    }
+    
+    /**
+     * Increments the quantity by 1.
+     * Used when adding a new copy of an existing book.
+     */
+    public void incrementQuantity() {
+        this.quantity++;
+    }
+    
+    /**
+     * Decrements the quantity by 1.
+     * Used when a copy is borrowed.
+     * 
+     * @throws IllegalStateException if quantity is already 0
+     */
+    public void decrementQuantity() {
+        if (quantity <= 0) {
+            throw new IllegalStateException("Cannot decrement quantity: already at 0");
+        }
+        this.quantity--;
     }
     
     /**
@@ -230,6 +299,7 @@ public class Book implements LibraryItem {
                 ", author='" + author + '\'' +
                 ", isbn='" + isbn + '\'' +
                 ", isAvailable=" + isAvailable +
+                ", quantity=" + quantity +
                 '}';
     }
 }

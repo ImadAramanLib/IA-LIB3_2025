@@ -41,11 +41,11 @@ public class LibraryService {
 
     /**
      * Adds a new book to the library. Requires an admin to be logged in.
-     * Rejects duplicate ISBNs.
+     * If a book with the same ISBN already exists, increments its quantity instead of adding a duplicate.
      *
      * @param book the book to add
      * @throws IllegalStateException    if no admin is logged in
-     * @throws IllegalArgumentException if the book is null or ISBN is duplicate
+     * @throws IllegalArgumentException if the book is null or ISBN is blank
      */
     public void addBook(Book book) {
         if (!authenticationService.isLoggedIn()) {
@@ -58,12 +58,20 @@ public class LibraryService {
         if (isbn == null || isbn.isBlank()) {
             throw new IllegalArgumentException("Book ISBN cannot be null or blank");
         }
-        boolean duplicate = bookList.stream()
-                .anyMatch(b -> isbn.equals(b.getIsbn()));
-        if (duplicate) {
-            throw new IllegalArgumentException("Duplicate ISBN: " + isbn);
+        
+        // Check if book with same ISBN already exists
+        Book existingBook = bookList.stream()
+                .filter(b -> isbn.equals(b.getIsbn()))
+                .findFirst()
+                .orElse(null);
+        
+        if (existingBook != null) {
+            // Increment quantity for existing book
+            existingBook.incrementQuantity();
+        } else {
+            // Add new book (quantity defaults to 1)
+            bookList.add(book);
         }
-        bookList.add(book);
     }
 
     /**
@@ -130,20 +138,30 @@ public class LibraryService {
     /**
      * Adds a book directly to the list without authentication check.
      * Used for loading books from database on startup.
+     * If a book with the same ISBN already exists, increments its quantity.
      * 
      * @param book the book to add
-     * @return true if added, false if duplicate
+     * @return true if added or quantity incremented, false if book is null or ISBN is blank
      */
     public boolean addBookDirectly(Book book) {
         if (book == null || book.getIsbn() == null || book.getIsbn().isBlank()) {
             return false;
         }
-        boolean duplicate = bookList.stream()
-                .anyMatch(b -> book.getIsbn().equals(b.getIsbn()));
-        if (duplicate) {
-            return false;
+        
+        // Check if book with same ISBN already exists
+        Book existingBook = bookList.stream()
+                .filter(b -> book.getIsbn().equals(b.getIsbn()))
+                .findFirst()
+                .orElse(null);
+        
+        if (existingBook != null) {
+            // Increment quantity for existing book
+            existingBook.incrementQuantity();
+            return true;
+        } else {
+            // Add new book
+            bookList.add(book);
+            return true;
         }
-        bookList.add(book);
-        return true;
     }
 }

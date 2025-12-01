@@ -35,12 +35,26 @@ class LibraryServiceTest {
     }
 
     @Test
-    @DisplayName("addBook: duplicate ISBN is rejected")
-    void testDuplicateIsbnRejected() {
+    @DisplayName("addBook: duplicate ISBN increments quantity instead of rejecting")
+    void testDuplicateIsbnIncrementsQuantity() {
         auth.login("admin", "pass");
-        library.addBook(new Book("A", "X", "ISBN-1"));
-        assertThrows(IllegalArgumentException.class,
-                () -> library.addBook(new Book("B", "Y", "ISBN-1")));
+        Book firstBook = new Book("A", "X", "ISBN-1");
+        library.addBook(firstBook);
+        assertEquals(1, firstBook.getQuantity(), "First book should have quantity 1");
+        
+        // Adding same ISBN should increment quantity, not throw exception
+        Book secondBook = new Book("B", "Y", "ISBN-1");
+        library.addBook(secondBook);
+        
+        // Should still have only one book in list
+        List<Book> all = library.getAllBooks();
+        assertEquals(1, all.size(), "Should still have only one book entry");
+        
+        // But quantity should be incremented
+        Book existingBook = library.searchByISBN("ISBN-1");
+        assertNotNull(existingBook);
+        assertEquals(2, existingBook.getQuantity(), "Quantity should be incremented to 2");
+        assertEquals("A", existingBook.getTitle(), "Original book details should be preserved");
     }
 
     @Test
@@ -84,5 +98,23 @@ class LibraryServiceTest {
         library.addBook(b);
         assertEquals(b, library.searchByISBN("I-1"));
         assertNull(library.searchByISBN("I-2"));
+    }
+    
+    @Test
+    @DisplayName("addBook: multiple copies of same ISBN increment quantity correctly")
+    void testMultipleCopiesIncrementQuantity() {
+        auth.login("admin", "pass");
+        Book first = new Book("Clean Code", "Robert Martin", "ISBN-123");
+        library.addBook(first);
+        
+        // Add 3 more copies
+        library.addBook(new Book("Clean Code", "Robert Martin", "ISBN-123"));
+        library.addBook(new Book("Clean Code", "Robert Martin", "ISBN-123"));
+        library.addBook(new Book("Clean Code", "Robert Martin", "ISBN-123"));
+        
+        Book book = library.searchByISBN("ISBN-123");
+        assertNotNull(book);
+        assertEquals(4, book.getQuantity(), "Should have 4 copies total");
+        assertEquals(1, library.getAllBooks().size(), "Should have only one book entry");
     }
 }
