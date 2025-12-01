@@ -12,6 +12,21 @@ package edu.najah.library.presentation;
 public class Main {
     
     /**
+     * Database environment variable name for the database URL.
+     */
+    private static final String ENV_DB_URL = "NEON_DB_URL";
+    
+    /**
+     * Database environment variable name for the database user.
+     */
+    private static final String ENV_DB_USER = "NEON_DB_USER";
+    
+    /**
+     * Database environment variable name for the database password.
+     */
+    private static final String ENV_DB_PASSWORD = "NEON_DB_PASSWORD";
+    
+    /**
      * Main entry point. Sets database environment variables and launches GUI.
      * 
      * @param args command line arguments (not used)
@@ -37,15 +52,15 @@ public class Main {
     private static void setDatabaseEnvironmentVariables() {
         // Set as system properties (DatabaseConfig checks both env vars and system properties)
         // Only set if not already set (allows override from Eclipse Run Configuration)
-        if (System.getenv("NEON_DB_URL") == null && System.getProperty("NEON_DB_URL") == null) {
-            System.setProperty("NEON_DB_URL", 
+        if (System.getenv(ENV_DB_URL) == null && System.getProperty(ENV_DB_URL) == null) {
+            System.setProperty(ENV_DB_URL, 
                 "jdbc:postgresql://ep-red-sun-agapswm0-pooler.c-2.eu-central-1.aws.neon.tech:5432/neondb?sslmode=require");
         }
-        if (System.getenv("NEON_DB_USER") == null && System.getProperty("NEON_DB_USER") == null) {
-            System.setProperty("NEON_DB_USER", "neondb_owner");
+        if (System.getenv(ENV_DB_USER) == null && System.getProperty(ENV_DB_USER) == null) {
+            System.setProperty(ENV_DB_USER, "neondb_owner");
         }
-        if (System.getenv("NEON_DB_PASSWORD") == null && System.getProperty("NEON_DB_PASSWORD") == null) {
-            System.setProperty("NEON_DB_PASSWORD", "npg_vFeS7Qoi3WuT");
+        if (System.getenv(ENV_DB_PASSWORD) == null && System.getProperty(ENV_DB_PASSWORD) == null) {
+            System.setProperty(ENV_DB_PASSWORD, "npg_vFeS7Qoi3WuT");
         }
     }
 }

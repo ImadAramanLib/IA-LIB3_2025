@@ -135,7 +135,9 @@ public class BranchCoverageTest {
             public boolean isAvailable() { return true; }
             
             @Override
-            public void setAvailable(boolean available) {}
+            public void setAvailable(boolean available) {
+                // Empty implementation for test mock - availability is fixed for unsupported item types
+            }
         };
         
         Loan loan = borrowingService.borrowItem(user, unsupportedItem, borrowDate);

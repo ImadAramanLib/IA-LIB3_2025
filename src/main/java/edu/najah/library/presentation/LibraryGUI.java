@@ -30,6 +30,17 @@ import java.util.HashSet;
  */
 public class LibraryGUI extends JFrame {
     
+    // Constants for string literals
+    private static final String FONT_NAME = "Segoe UI";
+    private static final String COLUMN_TITLE = "Title";
+    private static final String COLUMN_AUTHOR = "Author";
+    private static final String MSG_LOGGED_IN_AS = "Logged in as: ";
+    private static final String MSG_ACCESS_DENIED = "Access Denied";
+    private static final String MSG_ERROR = "Error";
+    private static final String MSG_SUCCESS = "Success";
+    private static final String MSG_ERROR_PREFIX = "Error: ";
+    private static final String MSG_UNKNOWN = "Unknown";
+    
     // Database
     private transient DatabaseService databaseService;
     private transient jakarta.persistence.EntityManager entityManager;
@@ -222,14 +233,14 @@ public class LibraryGUI extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 0;
         JLabel titleLabel = new JLabel("Library Management System");
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 32));
+        titleLabel.setFont(new Font(FONT_NAME, Font.BOLD, 32));
         titleLabel.setForeground(new Color(70, 130, 180));
         panel.add(titleLabel, gbc);
         
         // Subtitle
         gbc.gridy = 1;
         JLabel subtitleLabel = new JLabel("Please login to continue");
-        subtitleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        subtitleLabel.setFont(new Font(FONT_NAME, Font.PLAIN, 14));
         subtitleLabel.setForeground(new Color(100, 100, 100));
         panel.add(subtitleLabel, gbc);
         
@@ -251,12 +262,12 @@ public class LibraryGUI extends JFrame {
         gbcBox.gridy = 0;
         gbcBox.anchor = GridBagConstraints.EAST;
         JLabel userLabel = new JLabel("Username:");
-        userLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        userLabel.setFont(new Font(FONT_NAME, Font.PLAIN, 12));
         loginBox.add(userLabel, gbcBox);
         gbcBox.gridx = 1;
         gbcBox.anchor = GridBagConstraints.WEST;
         usernameField = new JTextField(20);
-        usernameField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        usernameField.setFont(new Font(FONT_NAME, Font.PLAIN, 12));
         usernameField.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLoweredBevelBorder(),
             new EmptyBorder(5, 8, 5, 8)
@@ -268,12 +279,12 @@ public class LibraryGUI extends JFrame {
         gbcBox.gridx = 0;
         gbcBox.anchor = GridBagConstraints.EAST;
         JLabel passLabel = new JLabel("Password:");
-        passLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        passLabel.setFont(new Font(FONT_NAME, Font.PLAIN, 12));
         loginBox.add(passLabel, gbcBox);
         gbcBox.gridx = 1;
         gbcBox.anchor = GridBagConstraints.WEST;
         passwordField = new JPasswordField(20);
-        passwordField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        passwordField.setFont(new Font(FONT_NAME, Font.PLAIN, 12));
         passwordField.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLoweredBevelBorder(),
             new EmptyBorder(5, 8, 5, 8)
@@ -287,7 +298,7 @@ public class LibraryGUI extends JFrame {
         gbcBox.anchor = GridBagConstraints.CENTER;
         JPanel buttonPanel = new JPanel(new FlowLayout());
         loginButton = new JButton("Login");
-        loginButton.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        loginButton.setFont(new Font(FONT_NAME, Font.BOLD, 12));
         loginButton.setPreferredSize(new Dimension(100, 35));
         loginButton.setBackground(new Color(70, 130, 180));
         loginButton.setForeground(Color.WHITE);
@@ -300,7 +311,7 @@ public class LibraryGUI extends JFrame {
         // Status
         gbcBox.gridy = 3;
         loginStatusLabel = new JLabel(" ");
-        loginStatusLabel.setFont(new Font("Segoe UI", Font.ITALIC, 11));
+        loginStatusLabel.setFont(new Font(FONT_NAME, Font.ITALIC, 11));
         loginStatusLabel.setForeground(Color.RED);
         loginBox.add(loginStatusLabel, gbcBox);
         
@@ -309,7 +320,7 @@ public class LibraryGUI extends JFrame {
         // Info
         gbc.gridy = 3;
         JLabel infoLabel = new JLabel("<html><i>Login as admin or user (check database for credentials)</i></html>");
-        infoLabel.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+        infoLabel.setFont(new Font(FONT_NAME, Font.PLAIN, 10));
         infoLabel.setForeground(new Color(150, 150, 150));
         panel.add(infoLabel, gbc);
         
@@ -329,11 +340,11 @@ public class LibraryGUI extends JFrame {
         topBar.setBackground(new Color(240, 240, 245));
         
         userInfoLabel = new JLabel("Not logged in");
-        userInfoLabel.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        userInfoLabel.setFont(new Font(FONT_NAME, Font.BOLD, 12));
         topBar.add(userInfoLabel, BorderLayout.WEST);
         
         logoutButton = new JButton("Logout");
-        logoutButton.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        logoutButton.setFont(new Font(FONT_NAME, Font.PLAIN, 11));
         logoutButton.setPreferredSize(new Dimension(80, 30));
         topBar.add(logoutButton, BorderLayout.EAST);
         
@@ -341,7 +352,7 @@ public class LibraryGUI extends JFrame {
         
         // Tabbed pane
         tabbedPane = new JTabbedPane();
-        tabbedPane.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        tabbedPane.setFont(new Font(FONT_NAME, Font.PLAIN, 12));
         
         tabbedPane.addTab("📚 Books", createBookManagementPanel());
         tabbedPane.addTab("🔍 Search", createSearchPanel());
@@ -358,7 +369,7 @@ public class LibraryGUI extends JFrame {
             BorderFactory.createLoweredBevelBorder(),
             new EmptyBorder(3, 10, 3, 10)
         ));
-        statusLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        statusLabel.setFont(new Font(FONT_NAME, Font.PLAIN, 11));
         add(statusLabel, BorderLayout.SOUTH);
     }
     
@@ -428,7 +439,7 @@ public class LibraryGUI extends JFrame {
         inputPanel.setBorder(BorderFactory.createTitledBorder(
             BorderFactory.createEtchedBorder(), "Add New Book",
             TitledBorder.LEFT, TitledBorder.TOP,
-            new Font("Segoe UI", Font.BOLD, 12)
+            new Font(FONT_NAME, Font.BOLD, 12)
         ));
         
         inputPanel.add(new JLabel("Title:"));
@@ -444,7 +455,7 @@ public class LibraryGUI extends JFrame {
         inputPanel.add(bookIsbnField);
         
         addBookButton = new JButton("Add Book");
-        addBookButton.setFont(new Font("Segoe UI", Font.BOLD, 11));
+        addBookButton.setFont(new Font(FONT_NAME, Font.BOLD, 11));
         addBookButton.setBackground(new Color(34, 139, 34));
         addBookButton.setForeground(Color.WHITE);
         addBookButton.setOpaque(true);
@@ -454,19 +465,19 @@ public class LibraryGUI extends JFrame {
         
         panel.add(inputPanel, BorderLayout.NORTH);
         
-        String[] columns = {"Title", "Author", "ISBN", "Available"};
+        String[] columns = {COLUMN_TITLE, COLUMN_AUTHOR, "ISBN", "Available"};
         booksTableModel = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) { return false; }
         };
         booksTable = new JTable(booksTableModel);
-        booksTable.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        booksTable.setFont(new Font(FONT_NAME, Font.PLAIN, 11));
         booksTable.setRowHeight(25);
         JScrollPane scrollPane = new JScrollPane(booksTable);
         panel.add(scrollPane, BorderLayout.CENTER);
         
         JButton refreshButton = new JButton("Refresh");
-        refreshButton.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        refreshButton.setFont(new Font(FONT_NAME, Font.PLAIN, 11));
         refreshButton.addActionListener(e -> refreshBooksTable());
         panel.add(refreshButton, BorderLayout.SOUTH);
         
@@ -479,9 +490,9 @@ public class LibraryGUI extends JFrame {
         
         JPanel searchPanel = new JPanel(new FlowLayout());
         searchField = new JTextField(25);
-        searchTypeCombo = new JComboBox<>(new String[]{"Title", "Author", "ISBN"});
+        searchTypeCombo = new JComboBox<>(new String[]{COLUMN_TITLE, COLUMN_AUTHOR, "ISBN"});
         searchButton = new JButton("Search");
-        searchButton.setFont(new Font("Segoe UI", Font.BOLD, 11));
+        searchButton.setFont(new Font(FONT_NAME, Font.BOLD, 11));
         searchButton.setBackground(new Color(70, 130, 180));
         searchButton.setForeground(Color.WHITE);
         searchButton.setOpaque(true);
@@ -493,13 +504,13 @@ public class LibraryGUI extends JFrame {
         searchPanel.add(searchButton);
         panel.add(searchPanel, BorderLayout.NORTH);
         
-        String[] columns = {"Title", "Author", "ISBN", "Available"};
+        String[] columns = {COLUMN_TITLE, COLUMN_AUTHOR, "ISBN", "Available"};
         searchResultsTableModel = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) { return false; }
         };
         searchResultsTable = new JTable(searchResultsTableModel);
-        searchResultsTable.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        searchResultsTable.setFont(new Font(FONT_NAME, Font.PLAIN, 11));
         searchResultsTable.setRowHeight(25);
         JScrollPane scrollPane = new JScrollPane(searchResultsTable);
         panel.add(scrollPane, BorderLayout.CENTER);
@@ -515,7 +526,7 @@ public class LibraryGUI extends JFrame {
         inputPanel.setBorder(BorderFactory.createTitledBorder(
             BorderFactory.createEtchedBorder(), "Borrow/Return Item",
             TitledBorder.LEFT, TitledBorder.TOP,
-            new Font("Segoe UI", Font.BOLD, 12)
+            new Font(FONT_NAME, Font.BOLD, 12)
         ));
         
         inputPanel.add(new JLabel("Book ISBN:"));
@@ -524,14 +535,14 @@ public class LibraryGUI extends JFrame {
         
         JPanel buttonPanel = new JPanel(new FlowLayout());
         borrowButton = new JButton("Borrow");
-        borrowButton.setFont(new Font("Segoe UI", Font.BOLD, 11));
+        borrowButton.setFont(new Font(FONT_NAME, Font.BOLD, 11));
         borrowButton.setBackground(new Color(70, 130, 180));
         borrowButton.setForeground(Color.WHITE);
         borrowButton.setOpaque(true);
         borrowButton.setBorderPainted(false);
         borrowButton.setFocusPainted(false);
         returnButton = new JButton("Return");
-        returnButton.setFont(new Font("Segoe UI", Font.BOLD, 11));
+        returnButton.setFont(new Font(FONT_NAME, Font.BOLD, 11));
         returnButton.setBackground(new Color(220, 20, 60));
         returnButton.setForeground(Color.WHITE);
         returnButton.setOpaque(true);
@@ -549,13 +560,13 @@ public class LibraryGUI extends JFrame {
             public boolean isCellEditable(int row, int column) { return false; }
         };
         loansTable = new JTable(loansTableModel);
-        loansTable.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        loansTable.setFont(new Font(FONT_NAME, Font.PLAIN, 11));
         loansTable.setRowHeight(25);
         JScrollPane scrollPane = new JScrollPane(loansTable);
         panel.add(scrollPane, BorderLayout.CENTER);
         
         JButton refreshButton = new JButton("Refresh Loans");
-        refreshButton.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        refreshButton.setFont(new Font(FONT_NAME, Font.PLAIN, 11));
         refreshButton.addActionListener(e -> refreshLoansTable());
         panel.add(refreshButton, BorderLayout.SOUTH);
         
@@ -570,7 +581,7 @@ public class LibraryGUI extends JFrame {
         inputPanel.setBorder(BorderFactory.createTitledBorder(
             BorderFactory.createEtchedBorder(), "Pay Fine",
             TitledBorder.LEFT, TitledBorder.TOP,
-            new Font("Segoe UI", Font.BOLD, 12)
+            new Font(FONT_NAME, Font.BOLD, 12)
         ));
         
         inputPanel.add(new JLabel("Amount (NIS):"));
@@ -578,7 +589,7 @@ public class LibraryGUI extends JFrame {
         inputPanel.add(fineAmountField);
         
         payFineButton = new JButton("Pay Fine");
-        payFineButton.setFont(new Font("Segoe UI", Font.BOLD, 11));
+        payFineButton.setFont(new Font(FONT_NAME, Font.BOLD, 11));
         payFineButton.setBackground(new Color(34, 139, 34));
         payFineButton.setForeground(Color.WHITE);
         payFineButton.setOpaque(true);
@@ -594,13 +605,13 @@ public class LibraryGUI extends JFrame {
             public boolean isCellEditable(int row, int column) { return false; }
         };
         finesTable = new JTable(finesTableModel);
-        finesTable.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        finesTable.setFont(new Font(FONT_NAME, Font.PLAIN, 11));
         finesTable.setRowHeight(25);
         JScrollPane scrollPane = new JScrollPane(finesTable);
         panel.add(scrollPane, BorderLayout.CENTER);
         
         JButton refreshButton = new JButton("Refresh Fines");
-        refreshButton.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        refreshButton.setFont(new Font(FONT_NAME, Font.PLAIN, 11));
         refreshButton.addActionListener(e -> refreshFinesTable());
         panel.add(refreshButton, BorderLayout.SOUTH);
         
@@ -615,7 +626,7 @@ public class LibraryGUI extends JFrame {
         inputPanel.setBorder(BorderFactory.createTitledBorder(
             BorderFactory.createEtchedBorder(), "User Management (Admin Only)",
             TitledBorder.LEFT, TitledBorder.TOP,
-            new Font("Segoe UI", Font.BOLD, 12)
+            new Font(FONT_NAME, Font.BOLD, 12)
         ));
         
         inputPanel.add(new JLabel("User ID:"));
@@ -640,14 +651,14 @@ public class LibraryGUI extends JFrame {
         
         JPanel buttonPanel = new JPanel(new FlowLayout());
         registerUserButton = new JButton("Register");
-        registerUserButton.setFont(new Font("Segoe UI", Font.BOLD, 11));
+        registerUserButton.setFont(new Font(FONT_NAME, Font.BOLD, 11));
         registerUserButton.setBackground(new Color(34, 139, 34));
         registerUserButton.setForeground(Color.WHITE);
         registerUserButton.setOpaque(true);
         registerUserButton.setBorderPainted(false);
         registerUserButton.setFocusPainted(false);
         unregisterUserButton = new JButton("Unregister");
-        unregisterUserButton.setFont(new Font("Segoe UI", Font.BOLD, 11));
+        unregisterUserButton.setFont(new Font(FONT_NAME, Font.BOLD, 11));
         unregisterUserButton.setBackground(new Color(220, 20, 60));
         unregisterUserButton.setForeground(Color.WHITE);
         unregisterUserButton.setOpaque(true);
@@ -665,13 +676,13 @@ public class LibraryGUI extends JFrame {
             public boolean isCellEditable(int row, int column) { return false; }
         };
         usersTable = new JTable(usersTableModel);
-        usersTable.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        usersTable.setFont(new Font(FONT_NAME, Font.PLAIN, 11));
         usersTable.setRowHeight(25);
         JScrollPane scrollPane = new JScrollPane(usersTable);
         panel.add(scrollPane, BorderLayout.CENTER);
         
         JButton refreshButton = new JButton("Refresh Users");
-        refreshButton.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        refreshButton.setFont(new Font(FONT_NAME, Font.PLAIN, 11));
         refreshButton.addActionListener(e -> refreshUsersTable());
         panel.add(refreshButton, BorderLayout.SOUTH);
         
@@ -684,14 +695,14 @@ public class LibraryGUI extends JFrame {
         
         JPanel buttonPanel = new JPanel(new FlowLayout());
         checkOverdueButton = new JButton("Check Overdue Items");
-        checkOverdueButton.setFont(new Font("Segoe UI", Font.BOLD, 11));
+        checkOverdueButton.setFont(new Font(FONT_NAME, Font.BOLD, 11));
         checkOverdueButton.setBackground(new Color(255, 140, 0));
         checkOverdueButton.setForeground(Color.WHITE);
         checkOverdueButton.setOpaque(true);
         checkOverdueButton.setBorderPainted(false);
         checkOverdueButton.setFocusPainted(false);
         sendRemindersButton = new JButton("Send Reminders");
-        sendRemindersButton.setFont(new Font("Segoe UI", Font.BOLD, 11));
+        sendRemindersButton.setFont(new Font(FONT_NAME, Font.BOLD, 11));
         sendRemindersButton.setBackground(new Color(70, 130, 180));
         sendRemindersButton.setForeground(Color.WHITE);
         sendRemindersButton.setOpaque(true);
@@ -707,7 +718,7 @@ public class LibraryGUI extends JFrame {
             public boolean isCellEditable(int row, int column) { return false; }
         };
         overdueTable = new JTable(overdueTableModel);
-        overdueTable.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        overdueTable.setFont(new Font(FONT_NAME, Font.PLAIN, 11));
         overdueTable.setRowHeight(25);
         JScrollPane scrollPane = new JScrollPane(overdueTable);
         panel.add(scrollPane, BorderLayout.CENTER);
@@ -755,7 +766,7 @@ public class LibraryGUI extends JFrame {
                 currentUsername = username;
                 authService.login(username, password);
                 showMainApplication();
-                userInfoLabel.setText("Logged in as: " + username + " (Admin)");
+                userInfoLabel.setText(MSG_LOGGED_IN_AS + username + " (Admin)");
                 statusLabel.setText("Welcome, Administrator!");
                 return;
             }
@@ -771,7 +782,7 @@ public class LibraryGUI extends JFrame {
                 currentUsername = username;
                 currentUser = user;
                 showMainApplication();
-                userInfoLabel.setText("Logged in as: " + user.getName() + " (User)");
+                userInfoLabel.setText(MSG_LOGGED_IN_AS + user.getName() + " (User)");
                 statusLabel.setText("Welcome, " + user.getName() + "!");
                 return;
             }
@@ -784,7 +795,7 @@ public class LibraryGUI extends JFrame {
                     currentUsername = username;
                     currentUser = user;
                     showMainApplication();
-                    userInfoLabel.setText("Logged in as: " + user.getName() + " (User)");
+                    userInfoLabel.setText(MSG_LOGGED_IN_AS + user.getName() + " (User)");
                     statusLabel.setText("Welcome, " + user.getName() + "!");
                     return;
                 }
@@ -796,7 +807,7 @@ public class LibraryGUI extends JFrame {
             isAdmin = true;
             currentUsername = username;
             showMainApplication();
-            userInfoLabel.setText("Logged in as: " + username + " (Admin)");
+            userInfoLabel.setText(MSG_LOGGED_IN_AS + username + " (Admin)");
             statusLabel.setText("Welcome, Administrator!");
             return;
         }
@@ -826,7 +837,7 @@ public class LibraryGUI extends JFrame {
     
     private void handleAddBook() {
         if (!isAdmin) {
-            showMessage("Only administrators can add books!", "Access Denied", JOptionPane.ERROR_MESSAGE);
+            showMessage("Only administrators can add books!", MSG_ACCESS_DENIED, JOptionPane.ERROR_MESSAGE);
             return;
         }
         
@@ -836,7 +847,7 @@ public class LibraryGUI extends JFrame {
             String isbn = bookIsbnField.getText().trim();
             
             if (title.isEmpty() || author.isEmpty() || isbn.isEmpty()) {
-                showMessage("Please fill all fields!", "Error", JOptionPane.ERROR_MESSAGE);
+                showMessage("Please fill all fields!", MSG_ERROR, JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
@@ -848,14 +859,14 @@ public class LibraryGUI extends JFrame {
                 databaseService.saveBook(book);
             }
             
-            showMessage("Book added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            showMessage("Book added successfully!", MSG_SUCCESS, JOptionPane.INFORMATION_MESSAGE);
             bookTitleField.setText("");
             bookAuthorField.setText("");
             bookIsbnField.setText("");
             refreshBooksTable();
             statusLabel.setText("Book added: " + title);
         } catch (Exception e) {
-            showMessage("Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            showMessage(MSG_ERROR_PREFIX + e.getMessage(), MSG_ERROR, JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -867,10 +878,10 @@ public class LibraryGUI extends JFrame {
         List<Book> results;
         
         switch (searchType) {
-            case "Title":
+            case COLUMN_TITLE:
                 results = libraryService.searchByTitle(query);
                 break;
-            case "Author":
+            case COLUMN_AUTHOR:
                 results = libraryService.searchByAuthor(query);
                 break;
             case "ISBN":
@@ -894,25 +905,25 @@ public class LibraryGUI extends JFrame {
     private void handleBorrow() {
         try {
             if (currentUser == null && !isAdmin) {
-                showMessage("Please login as a user to borrow items!", "Error", JOptionPane.ERROR_MESSAGE);
+                showMessage("Please login as a user to borrow items!", MSG_ERROR, JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
             String isbn = borrowItemIdField.getText().trim();
             if (isbn.isEmpty()) {
-                showMessage("Please enter ISBN!", "Error", JOptionPane.ERROR_MESSAGE);
+                showMessage("Please enter ISBN!", MSG_ERROR, JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
             User user = isAdmin ? null : currentUser;
             if (user == null && isAdmin) {
-                showMessage("Admins cannot borrow items. Please login as a user.", "Error", JOptionPane.ERROR_MESSAGE);
+                showMessage("Admins cannot borrow items. Please login as a user.", MSG_ERROR, JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
             Book book = libraryService.searchByISBN(isbn);
             if (book == null) {
-                showMessage("Book not found!", "Error", JOptionPane.ERROR_MESSAGE);
+                showMessage("Book not found!", MSG_ERROR, JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
@@ -920,24 +931,24 @@ public class LibraryGUI extends JFrame {
             
             if (loan != null) {
                 showMessage("Book borrowed successfully! Due date: " + loan.getDueDate(),
-                    "Success", JOptionPane.INFORMATION_MESSAGE);
+                    MSG_SUCCESS, JOptionPane.INFORMATION_MESSAGE);
                 refreshLoansTable();
                 statusLabel.setText("Book borrowed: " + book.getTitle());
             } else {
                 showMessage("Borrowing failed! Check if book is available or user has restrictions.",
-                    "Error", JOptionPane.ERROR_MESSAGE);
+                    MSG_ERROR, JOptionPane.ERROR_MESSAGE);
             }
         } catch (IllegalStateException e) {
-            showMessage("Cannot borrow: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            showMessage("Cannot borrow: " + e.getMessage(), MSG_ERROR, JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
-            showMessage("Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            showMessage(MSG_ERROR_PREFIX + e.getMessage(), MSG_ERROR, JOptionPane.ERROR_MESSAGE);
         }
     }
     
     private void handleReturn() {
         int selectedRow = loansTable.getSelectedRow();
         if (selectedRow < 0) {
-            showMessage("Please select a loan to return!", "Error", JOptionPane.ERROR_MESSAGE);
+            showMessage("Please select a loan to return!", MSG_ERROR, JOptionPane.ERROR_MESSAGE);
             return;
         }
         
@@ -956,7 +967,7 @@ public class LibraryGUI extends JFrame {
                        userService.findUserById(userId);
             
             if (user == null) {
-                showMessage("User not found!", "Error", JOptionPane.ERROR_MESSAGE);
+                showMessage("User not found!", MSG_ERROR, JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
@@ -973,17 +984,17 @@ public class LibraryGUI extends JFrame {
             }
             
             if (loanToReturn == null) {
-                showMessage("Active loan not found for this book!", "Error", JOptionPane.ERROR_MESSAGE);
+                showMessage("Active loan not found for this book!", MSG_ERROR, JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
             borrowingService.returnBook(loanToReturn, LocalDate.now());
-            showMessage("Book returned successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            showMessage("Book returned successfully!", MSG_SUCCESS, JOptionPane.INFORMATION_MESSAGE);
             refreshLoansTable();
             refreshBooksTable(); // Also refresh books to show availability
             statusLabel.setText("Book returned: " + bookTitle);
         } catch (Exception e) {
-            showMessage("Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            showMessage(MSG_ERROR_PREFIX + e.getMessage(), MSG_ERROR, JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
@@ -991,41 +1002,41 @@ public class LibraryGUI extends JFrame {
     private void handlePayFine() {
         try {
             if (currentUser == null && !isAdmin) {
-                showMessage("Please login as a user to pay fines!", "Error", JOptionPane.ERROR_MESSAGE);
+                showMessage("Please login as a user to pay fines!", MSG_ERROR, JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
             String amountStr = fineAmountField.getText().trim();
             if (amountStr.isEmpty()) {
-                showMessage("Please enter amount!", "Error", JOptionPane.ERROR_MESSAGE);
+                showMessage("Please enter amount!", MSG_ERROR, JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
             double amount = Double.parseDouble(amountStr);
             User user = isAdmin ? null : currentUser;
             if (user == null) {
-                showMessage("Please login as a user!", "Error", JOptionPane.ERROR_MESSAGE);
+                showMessage("Please login as a user!", MSG_ERROR, JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
             if (borrowingService.payFine(user, amount)) {
-                showMessage("Fine paid successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                showMessage("Fine paid successfully!", MSG_SUCCESS, JOptionPane.INFORMATION_MESSAGE);
                 fineAmountField.setText("");
                 refreshFinesTable();
                 statusLabel.setText("Fine paid: " + amount + " NIS");
             } else {
-                showMessage("Payment failed! Check if user has unpaid fines.", "Error", JOptionPane.ERROR_MESSAGE);
+                showMessage("Payment failed! Check if user has unpaid fines.", MSG_ERROR, JOptionPane.ERROR_MESSAGE);
             }
         } catch (NumberFormatException e) {
-            showMessage("Invalid amount format!", "Error", JOptionPane.ERROR_MESSAGE);
+            showMessage("Invalid amount format!", MSG_ERROR, JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
-            showMessage("Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            showMessage(MSG_ERROR_PREFIX + e.getMessage(), MSG_ERROR, JOptionPane.ERROR_MESSAGE);
         }
     }
     
     private void handleRegisterUser() {
         if (!isAdmin) {
-            showMessage("Only administrators can register users!", "Access Denied", JOptionPane.ERROR_MESSAGE);
+            showMessage("Only administrators can register users!", MSG_ACCESS_DENIED, JOptionPane.ERROR_MESSAGE);
             return;
         }
         
@@ -1037,19 +1048,19 @@ public class LibraryGUI extends JFrame {
             String email = userEmailField.getText().trim();
             
             if (userId.isEmpty() || username.isEmpty() || password.isEmpty() || name.isEmpty() || email.isEmpty()) {
-                showMessage("Please fill all fields!", "Error", JOptionPane.ERROR_MESSAGE);
+                showMessage("Please fill all fields!", MSG_ERROR, JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
             // Validate username: no spaces
             if (username.contains(" ")) {
-                showMessage("Username cannot contain spaces!", "Error", JOptionPane.ERROR_MESSAGE);
+                showMessage("Username cannot contain spaces!", MSG_ERROR, JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
             // Validate username: alphanumeric and underscore only (optional)
             if (!username.matches("^[a-zA-Z0-9_]+$")) {
-                showMessage("Username can only contain letters, numbers, and underscores!", "Error", JOptionPane.ERROR_MESSAGE);
+                showMessage("Username can only contain letters, numbers, and underscores!", MSG_ERROR, JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
@@ -1061,7 +1072,7 @@ public class LibraryGUI extends JFrame {
                 }
                 
                 showMessage("User registered successfully!\nUsername: " + username + "\nPassword: " + password, 
-                    "Success", JOptionPane.INFORMATION_MESSAGE);
+                    MSG_SUCCESS, JOptionPane.INFORMATION_MESSAGE);
                 userIdField.setText("");
                 userUsernameField.setText("");
                 userPasswordField.setText("");
@@ -1070,29 +1081,29 @@ public class LibraryGUI extends JFrame {
                 refreshUsersTable();
                 statusLabel.setText("User registered: " + name + " (Username: " + username + ")");
             } else {
-                showMessage("User already exists!", "Error", JOptionPane.ERROR_MESSAGE);
+                showMessage("User already exists!", MSG_ERROR, JOptionPane.ERROR_MESSAGE);
             }
         } catch (Exception e) {
-            showMessage("Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            showMessage(MSG_ERROR_PREFIX + e.getMessage(), MSG_ERROR, JOptionPane.ERROR_MESSAGE);
         }
     }
     
     private void handleUnregisterUser() {
         if (!isAdmin) {
-            showMessage("Only administrators can unregister users!", "Access Denied", JOptionPane.ERROR_MESSAGE);
+            showMessage("Only administrators can unregister users!", MSG_ACCESS_DENIED, JOptionPane.ERROR_MESSAGE);
             return;
         }
         
         try {
             String userId = userIdField.getText().trim();
             if (userId.isEmpty()) {
-                showMessage("Please enter User ID!", "Error", JOptionPane.ERROR_MESSAGE);
+                showMessage("Please enter User ID!", MSG_ERROR, JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
             User user = userService.findUserById(userId);
             if (user == null) {
-                showMessage("User not found!", "Error", JOptionPane.ERROR_MESSAGE);
+                showMessage("User not found!", MSG_ERROR, JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
@@ -1102,7 +1113,7 @@ public class LibraryGUI extends JFrame {
                     databaseService.deleteUser(user);
                 }
                 
-                showMessage("User unregistered successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                showMessage("User unregistered successfully!", MSG_SUCCESS, JOptionPane.INFORMATION_MESSAGE);
                 userIdField.setText("");
                 userUsernameField.setText("");
                 userPasswordField.setText("");
@@ -1112,10 +1123,10 @@ public class LibraryGUI extends JFrame {
                 statusLabel.setText("User unregistered: " + userId);
             } else {
                 showMessage("User cannot be unregistered! Check for active loans or unpaid fines.",
-                    "Error", JOptionPane.ERROR_MESSAGE);
+                    MSG_ERROR, JOptionPane.ERROR_MESSAGE);
             }
         } catch (Exception e) {
-            showMessage("Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            showMessage(MSG_ERROR_PREFIX + e.getMessage(), MSG_ERROR, JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -1127,8 +1138,8 @@ public class LibraryGUI extends JFrame {
         for (Loan loan : overdueLoans) {
             long daysOverdue = loan.getDaysOverdue(today);
             double fine = overdueService.calculateOverdueFine(loan, today);
-            String userInfo = loan.getUser() != null ? loan.getUser().getUserId() : "Unknown";
-            String bookInfo = loan.getBook() != null ? loan.getBook().getTitle() : "Unknown";
+            String userInfo = loan.getUser() != null ? loan.getUser().getUserId() : MSG_UNKNOWN;
+            String bookInfo = loan.getBook() != null ? loan.getBook().getTitle() : MSG_UNKNOWN;
             
             overdueTableModel.addRow(new Object[]{
                 userInfo, bookInfo, daysOverdue, String.format("%.2f", fine)
@@ -1140,14 +1151,14 @@ public class LibraryGUI extends JFrame {
     
     private void handleSendReminders() {
         if (!isAdmin) {
-            showMessage("Only administrators can send reminders!", "Access Denied", JOptionPane.ERROR_MESSAGE);
+            showMessage("Only administrators can send reminders!", MSG_ACCESS_DENIED, JOptionPane.ERROR_MESSAGE);
             return;
         }
         
         reminderService.sendReminders(LocalDate.now());
         int sentCount = emailServer.getSentEmailCount();
         
-        showMessage("Sent " + sentCount + " reminder email(s)!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        showMessage("Sent " + sentCount + " reminder email(s)!", MSG_SUCCESS, JOptionPane.INFORMATION_MESSAGE);
         statusLabel.setText("Sent " + sentCount + " reminders");
     }
     
@@ -1195,8 +1206,8 @@ public class LibraryGUI extends JFrame {
         List<Loan> loans = borrowingService.getLoans();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         for (Loan loan : loans) {
-            String userInfo = loan.getUser() != null ? loan.getUser().getUserId() : "Unknown";
-            String bookInfo = loan.getBook() != null ? loan.getBook().getTitle() : "Unknown";
+            String userInfo = loan.getUser() != null ? loan.getUser().getUserId() : MSG_UNKNOWN;
+            String bookInfo = loan.getBook() != null ? loan.getBook().getTitle() : MSG_UNKNOWN;
             String borrowDate = loan.getBorrowDate() != null ? loan.getBorrowDate().format(formatter) : "";
             String dueDate = loan.getDueDate() != null ? loan.getDueDate().format(formatter) : "";
             String returnDate = loan.getReturnDate() != null ? loan.getReturnDate().format(formatter) : "Not returned";
@@ -1212,7 +1223,7 @@ public class LibraryGUI extends JFrame {
         finesTableModel.setRowCount(0);
         List<Fine> fines = borrowingService.getFines();
         for (Fine fine : fines) {
-            String userInfo = fine.getUser() != null ? fine.getUser().getUserId() : "Unknown";
+            String userInfo = fine.getUser() != null ? fine.getUser().getUserId() : MSG_UNKNOWN;
             finesTableModel.addRow(new Object[]{
                 userInfo,
                 String.format("%.2f", fine.getAmount()),
