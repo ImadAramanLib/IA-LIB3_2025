@@ -64,7 +64,6 @@ jobs:
           -Dsonar.projectKey=ImadAramanLib_IA-LIB3_2025
           -Dsonar.organization=imadaramanlib
           -Dsonar.host.url=https://sonarcloud.io
-          -Dsonar.ci.autoscan.disabled=true
           -Dsonar.coverage.exclusions=**/Main.java,**/*Test.java,**/presentation/**,**/config/**,**/persistence/**,**/util/**
           -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
