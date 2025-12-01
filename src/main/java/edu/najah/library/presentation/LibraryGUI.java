@@ -752,67 +752,141 @@ public class LibraryGUI extends JFrame {
         String username = usernameField.getText().trim();
         String password = new String(passwordField.getPassword());
         
+        if (!validateCredentials(username, password)) {
+            return;
+        }
+        
+        if (tryAdminLogin(username, password)) {
+            return;
+        }
+        
+        if (tryUserLogin(username, password)) {
+            return;
+        }
+        
+        if (tryInMemoryLogin(username, password)) {
+            return;
+        }
+        
+        handleLoginFailure();
+    }
+    
+    /**
+     * Validates that username and password are not empty.
+     * 
+     * @param username the username to validate
+     * @param password the password to validate
+     * @return true if credentials are valid, false otherwise
+     */
+    private boolean validateCredentials(String username, String password) {
         if (username.isEmpty() || password.isEmpty()) {
             loginStatusLabel.setText("Please enter username and password");
             loginStatusLabel.setForeground(Color.RED);
-            return;
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Attempts to login as an admin using the database service.
+     * 
+     * @param username the username to login with
+     * @param password the password to login with
+     * @return true if admin login was successful, false otherwise
+     */
+    private boolean tryAdminLogin(String username, String password) {
+        if (databaseService == null) {
+            return false;
         }
         
-        // Check if admin
-        if (databaseService != null) {
-            Admin admin = databaseService.findAdminByUsername(username);
-            if (admin != null && admin.getPassword().equals(password)) {
-                isAdmin = true;
-                currentUsername = username;
-                authService.login(username, password);
-                showMainApplication();
-                userInfoLabel.setText(MSG_LOGGED_IN_AS + username + " (Admin)");
-                statusLabel.setText("Welcome, Administrator!");
-                return;
-            }
+        Admin admin = databaseService.findAdminByUsername(username);
+        if (admin != null && admin.getPassword().equals(password)) {
+            handleAdminLoginSuccess(username, password);
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Attempts to login as a user using the database service.
+     * 
+     * @param username the username to login with
+     * @param password the password to login with
+     * @return true if user login was successful, false otherwise
+     */
+    private boolean tryUserLogin(String username, String password) {
+        if (databaseService == null) {
+            return false;
         }
         
-        // Check if user (using username/password)
-        if (databaseService != null) {
-            // Try to find user by username
-            User user = databaseService.findUserByUsername(username);
-            if (user != null && user.getPassword() != null && user.getPassword().equals(password)) {
-                // Valid user login
-                isAdmin = false;
-                currentUsername = username;
-                currentUser = user;
-                showMainApplication();
-                userInfoLabel.setText(MSG_LOGGED_IN_AS + user.getName() + " (User)");
-                statusLabel.setText("Welcome, " + user.getName() + "!");
-                return;
-            }
-            // Fallback: try by user ID (for backward compatibility)
-            user = databaseService.findUserById(username);
-            if (user != null) {
-                // If user has no password set, allow login with just user ID
-                if (user.getPassword() == null || user.getPassword().isEmpty()) {
-                    isAdmin = false;
-                    currentUsername = username;
-                    currentUser = user;
-                    showMainApplication();
-                    userInfoLabel.setText(MSG_LOGGED_IN_AS + user.getName() + " (User)");
-                    statusLabel.setText("Welcome, " + user.getName() + "!");
-                    return;
-                }
-            }
+        // Try to find user by username
+        User user = databaseService.findUserByUsername(username);
+        if (user != null && user.getPassword() != null && user.getPassword().equals(password)) {
+            handleUserLoginSuccess(username, user);
+            return true;
         }
         
-        // Fallback: check in-memory services
+        // Fallback: try by user ID (for backward compatibility)
+        user = databaseService.findUserById(username);
+        if (user != null && (user.getPassword() == null || user.getPassword().isEmpty())) {
+            handleUserLoginSuccess(username, user);
+            return true;
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Attempts to login using in-memory authentication service as fallback.
+     * 
+     * @param username the username to login with
+     * @param password the password to login with
+     * @return true if in-memory login was successful, false otherwise
+     */
+    private boolean tryInMemoryLogin(String username, String password) {
         if (authService.login(username, password)) {
-            isAdmin = true;
-            currentUsername = username;
-            showMainApplication();
-            userInfoLabel.setText(MSG_LOGGED_IN_AS + username + " (Admin)");
-            statusLabel.setText("Welcome, Administrator!");
-            return;
+            handleAdminLoginSuccess(username, null); // null indicates in-memory login (already authenticated)
+            return true;
         }
-        
-        // Login failed
+        return false;
+    }
+    
+    /**
+     * Handles successful admin login by setting up the session and UI.
+     * 
+     * @param username the username of the logged-in admin
+     * @param password the password (null if already authenticated via in-memory service)
+     */
+    private void handleAdminLoginSuccess(String username, String password) {
+        isAdmin = true;
+        currentUsername = username;
+        if (password != null) {
+            authService.login(username, password);
+        }
+        showMainApplication();
+        userInfoLabel.setText(MSG_LOGGED_IN_AS + username + " (Admin)");
+        statusLabel.setText("Welcome, Administrator!");
+    }
+    
+    /**
+     * Handles successful user login by setting up the session and UI.
+     * 
+     * @param username the username of the logged-in user
+     * @param user the User object for the logged-in user
+     */
+    private void handleUserLoginSuccess(String username, User user) {
+        isAdmin = false;
+        currentUsername = username;
+        currentUser = user;
+        showMainApplication();
+        userInfoLabel.setText(MSG_LOGGED_IN_AS + user.getName() + " (User)");
+        statusLabel.setText("Welcome, " + user.getName() + "!");
+    }
+    
+    /**
+     * Handles login failure by displaying an error message.
+     */
+    private void handleLoginFailure() {
         loginStatusLabel.setText("Invalid username or password");
         loginStatusLabel.setForeground(Color.RED);
         passwordField.setText("");
