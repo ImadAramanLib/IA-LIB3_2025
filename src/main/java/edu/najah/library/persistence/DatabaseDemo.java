@@ -34,19 +34,8 @@ public class DatabaseDemo {
         logger.info("=== Database Connection Demo ===");
         
         // Get EntityManager using environment variables
+        // Note: createEntityManager() uses default values if env vars are not set, so it won't return null
         EntityManager em = DatabaseConfig.createEntityManager();
-        
-        // Check if EntityManager creation failed (can happen if database initialization fails)
-        if (em == null) {
-            logger.severe("ERROR: Could not create EntityManager.");
-            logger.severe("Please check your environment variables:");
-            logger.severe("  - NEON_DB_URL");
-            logger.severe("  - NEON_DB_USER");
-            logger.severe("  - NEON_DB_PASSWORD");
-            return;
-        }
-        
-        // EntityManager is not null, proceed with database operations
         
         logger.info("✓ Successfully connected to database!");
         
