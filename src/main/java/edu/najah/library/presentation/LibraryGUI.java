@@ -55,7 +55,6 @@ public class LibraryGUI extends JFrame {
     private transient MockEmailServer emailServer;
     
     // Current user info
-    private String currentUsername;
     private boolean isAdmin;
     private User currentUser;
     
@@ -853,7 +852,6 @@ public class LibraryGUI extends JFrame {
      */
     private void handleAdminLoginSuccess(String username, String password) {
         isAdmin = true;
-        currentUsername = username;
         if (password != null) {
             authService.login(username, password);
         }
@@ -870,7 +868,6 @@ public class LibraryGUI extends JFrame {
      */
     private void handleUserLoginSuccess(String username, User user) {
         isAdmin = false;
-        currentUsername = username;
         currentUser = user;
         showMainApplication();
         userInfoLabel.setText(MSG_LOGGED_IN_AS + user.getName() + " (User)");
@@ -893,7 +890,6 @@ public class LibraryGUI extends JFrame {
         
         if (confirm == JOptionPane.YES_OPTION) {
             authService.logout();
-            currentUsername = null;
             currentUser = null;
             isAdmin = false;
             usernameField.setText("");
@@ -983,11 +979,12 @@ public class LibraryGUI extends JFrame {
                 return;
             }
             
-            User user = isAdmin ? null : currentUser;
-            if (user == null && isAdmin) {
+            if (isAdmin) {
                 showMessage("Admins cannot borrow items. Please login as a user.", MSG_ERROR, JOptionPane.ERROR_MESSAGE);
                 return;
             }
+            
+            User user = currentUser;
             
             Book book = libraryService.searchByISBN(isbn);
             if (book == null) {

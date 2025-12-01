@@ -62,7 +62,7 @@ public class NotificationServiceTest {
     @DisplayName("US3.1: sendReminderToUser sends email with correct message format")
     void testSendReminderToUserSendsCorrectMessage() {
         // Create an overdue loan
-        Loan loan = borrowingService.borrowBook(user, book, borrowDate);
+        borrowingService.borrowBook(user, book, borrowDate);
         LocalDate currentDate = borrowDate.plusDays(30); // 2 days overdue
         
         boolean result = notificationService.sendReminderToUser(user, currentDate);
@@ -120,7 +120,7 @@ public class NotificationServiceTest {
     @DisplayName("sendReminderToUser returns false when user has no overdue books")
     void testSendReminderReturnsFalseWhenNoOverdue() {
         // Create a loan that's not overdue
-        Loan loan = borrowingService.borrowBook(user, book, borrowDate);
+        borrowingService.borrowBook(user, book, borrowDate);
         LocalDate currentDate = borrowDate.plusDays(20); // Not overdue yet
         
         boolean result = notificationService.sendReminderToUser(user, currentDate);
@@ -144,7 +144,7 @@ public class NotificationServiceTest {
     @DisplayName("sendReminderToUser returns false for user without email")
     void testSendReminderReturnsFalseForUserWithoutEmail() {
         User userNoEmail = new User("U003", "No Email User", null);
-        Loan loan = borrowingService.borrowBook(userNoEmail, book, borrowDate);
+        borrowingService.borrowBook(userNoEmail, book, borrowDate);
         LocalDate currentDate = borrowDate.plusDays(30);
         
         boolean result = notificationService.sendReminderToUser(userNoEmail, currentDate);

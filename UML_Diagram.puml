@@ -1,0 +1,322 @@
+@startuml Library Management System - Class Diagram
+
+!theme plain
+skinparam packageStyle rectangle
+skinparam maxMessageSize 60
+skinparam linetype ortho
+skinparam shadowing false
+skinparam roundcorner 10
+skinparam defaultFontSize 9
+skinparam classAttributeIconSize 0
+skinparam classFontSize 9
+skinparam packageFontSize 10
+
+scale 0.65
+
+package "Domain Layer" #E1F5FF {
+    interface LibraryItem {
+        +String getUniqueIdentifier()
+        +String getTitle()
+        +boolean isAvailable()
+        +void setAvailable(boolean)
+        +int getLoanPeriodDays()
+        +ItemType getItemType()
+    }
+    
+    enum ItemType {
+        BOOK
+        CD
+        JOURNAL
+    }
+    
+    class Book {
+        -Long id
+        -String title
+        -String author
+        -String isbn
+        -boolean isAvailable
+        +Book(String, String, String)
+        +getTitle() : String
+        +getAuthor() : String
+        +getIsbn() : String
+    }
+    
+    class CD {
+        -Long id
+        -String title
+        -String artist
+        -String catalogNumber
+        -boolean isAvailable
+        +CD(String, String, String)
+        +getTitle() : String
+        +getArtist() : String
+    }
+    
+    class Journal {
+        -String title
+        -String publisher
+        -String issn
+        -boolean isAvailable
+        +Journal(String, String, String)
+    }
+    
+    class User {
+        -Long id
+        -String userId
+        -String name
+        -String email
+        -String username
+        -String password
+        +User(String, String, String)
+        +getUserId() : String
+        +getName() : String
+    }
+    
+    class Admin {
+        -Long id
+        -String username
+        -String password
+        -String email
+        +Admin(String, String)
+    }
+    
+    class Loan {
+        -Long id
+        -String itemType
+        -String itemIdentifier
+        -String itemTitle
+        -User user
+        -LocalDate borrowDate
+        -LocalDate dueDate
+        -LocalDate returnDate
+        -LibraryItem item
+        +Loan(LibraryItem, User, LocalDate)
+        +getDaysOverdue(LocalDate) : long
+        +isReturned() : boolean
+    }
+    
+    class Fine {
+        -User user
+        -double amount
+        -boolean isPaid
+        -LocalDate createdDate
+        +Fine(User, double, LocalDate)
+        +calculateFineAmount(long) : double
+        +getRemainingBalance() : double
+    }
+    
+    Book ..|> LibraryItem : implements
+    CD ..|> LibraryItem : implements
+    Journal ..|> LibraryItem : implements
+    LibraryItem ..> ItemType : uses
+    Loan "1" --> "1" User : borrows
+    Loan "1" --> "0..1" LibraryItem : contains
+    Fine "1" --> "1" User : charged to
+}
+
+package "Service Layer" #FFF4E1 {
+    interface FineStrategy {
+        +int calculateFine(int overdueDays)
+        +int getFineRatePerDay()
+    }
+    
+    class BookFineStrategy {
+        -int BOOK_FINE_RATE = 10
+        +calculateFine(int) : int
+        +getFineRatePerDay() : int
+    }
+    
+    class CDFineStrategy {
+        -int CD_FINE_RATE = 20
+        +calculateFine(int) : int
+        +getFineRatePerDay() : int
+    }
+    
+    class JournalFineStrategy {
+        -int JOURNAL_FINE_RATE = 15
+        +calculateFine(int) : int
+        +getFineRatePerDay() : int
+    }
+    
+    class FineStrategyFactory {
+        +{static} FineStrategy getStrategy(ItemType)
+        +{static} FineStrategy getDefaultStrategy()
+    }
+    
+    class LibraryService {
+        -List<Book> bookList
+        -AuthenticationService authenticationService
+        +addBook(Book)
+        +searchByTitle(String) : List<Book>
+        +searchByAuthor(String) : List<Book>
+        +searchByISBN(String) : Book
+    }
+    
+    class AuthenticationService {
+        -Map<String, Admin> admins
+        -Admin currentAdmin
+        +login(String, String) : boolean
+        +logout()
+        +registerAdmin(Admin)
+        +isLoggedIn() : boolean
+    }
+    
+    class BorrowingService {
+        -List<Loan> loans
+        -List<Fine> fines
+        -OverdueDetectionService overdueDetectionService
+        +borrowBook(User, Book, LocalDate) : Loan
+        +borrowCD(User, CD, LocalDate) : Loan
+        +borrowItem(User, LibraryItem, LocalDate) : Loan
+        +returnItem(Loan, LocalDate)
+        +payFine(User, double) : boolean
+        +getActiveLoans(User) : List<Loan>
+    }
+    
+    class OverdueDetectionService {
+        -BorrowingService borrowingService
+        +getOverdueLoans(LocalDate) : List<Loan>
+        +calculateOverdueFine(Loan, LocalDate) : double
+        +getMixedMediaOverdueReport(User, LocalDate) : Map<String, Object>
+    }
+    
+    interface Observer {
+        +boolean notify(User, String)
+        +String getObserverType()
+    }
+    
+    interface Subject {
+        +void attach(Observer)
+        +void detach(Observer)
+        +void notifyObservers(User, String)
+    }
+    
+    class NotificationService {
+        -OverdueDetectionService overdueService
+        -List<Observer> observers
+        +sendOverdueReminders(LocalDate) : int
+        +sendReminderToUser(User, LocalDate) : boolean
+        +attach(Observer)
+        +detach(Observer)
+    }
+    
+    class EmailNotifier {
+        -EmailService emailService
+        -String subject
+        +notify(User, String) : boolean
+        +getObserverType() : String
+    }
+    
+    interface EmailService {
+        +boolean sendEmail(String, String, String)
+        +boolean isTestMode()
+    }
+    
+    class MockEmailServer {
+        -List<EmailRecord> sentEmails
+        -boolean testMode
+        +sendEmail(String, String, String) : boolean
+    }
+    
+    class UserManagementService {
+        -BorrowingService borrowingService
+        -AuthenticationService authService
+        -EmailService emailService
+        -List<User> users
+        +registerUser(User) : boolean
+        +unregisterUser(String) : boolean
+        +findUserById(String) : User
+    }
+    
+    BookFineStrategy ..|> FineStrategy
+    CDFineStrategy ..|> FineStrategy
+    JournalFineStrategy ..|> FineStrategy
+    FineStrategyFactory ..> FineStrategy : creates
+    LibraryService --> Book : manages
+    BorrowingService --> Loan : manages
+    BorrowingService --> Fine : manages
+    BorrowingService --> User : works with
+    BorrowingService --> Book : borrows
+    BorrowingService --> CD : borrows
+    BorrowingService --> LibraryItem : borrows
+    BorrowingService --> OverdueDetectionService : uses
+    OverdueDetectionService --> BorrowingService : uses
+    OverdueDetectionService --> FineStrategy : uses
+    NotificationService ..|> Subject
+    NotificationService --> Observer : notifies
+    EmailNotifier ..|> Observer
+    EmailNotifier --> EmailService : uses
+    MockEmailServer ..|> EmailService
+    UserManagementService --> User : manages
+    UserManagementService --> BorrowingService : uses
+}
+
+package "Presentation Layer" #E8F5E9 {
+    class LibraryGUI {
+        -DatabaseService databaseService
+        -AuthenticationService authService
+        -LibraryService libraryService
+        -BorrowingService borrowingService
+        -OverdueDetectionService overdueService
+        -NotificationService notificationService
+        -UserManagementService userManagementService
+        -User currentUser
+        -boolean isAdmin
+        +handleLogin()
+        +handleAddBook()
+        +handleBorrow()
+        +handleReturn()
+    }
+    
+    class Main {
+        +{static} main(String[])
+        -{static} setDatabaseEnvironmentVariables()
+    }
+    
+    LibraryGUI --> AuthenticationService : uses
+    LibraryGUI --> LibraryService : uses
+    LibraryGUI --> BorrowingService : uses
+    LibraryGUI --> OverdueDetectionService : uses
+    LibraryGUI --> NotificationService : uses
+    LibraryGUI --> UserManagementService : uses
+    LibraryGUI --> User : displays
+}
+
+package "Persistence Layer" #F5F5F5 {
+    class DatabaseService {
+        -EntityManager entityManager
+        +saveBook(Book)
+        +saveUser(User)
+        +loadAllBooks() : List<Book>
+        +loadAllUsers() : List<User>
+        +findUserById(String) : User
+    }
+    
+    class DatabaseConfig {
+        +{static} EntityManagerFactory getEntityManagerFactory()
+        +{static} EntityManager createEntityManager()
+        +{static} void closeEntityManagerFactory()
+    }
+    
+    DatabaseService --> Book : persists
+    DatabaseService --> User : persists
+    DatabaseService --> Admin : persists
+}
+
+note right of LibraryItem
+    Polymorphism: Book, CD, Journal
+    implement this interface
+end note
+
+note right of FineStrategy
+    Strategy Pattern: Different fine
+    rates for different item types
+end note
+
+note right of Observer
+    Observer Pattern: NotificationService
+    notifies multiple observers
+end note
+
+@enduml
+

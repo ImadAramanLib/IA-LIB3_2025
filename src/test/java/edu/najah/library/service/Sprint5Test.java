@@ -231,8 +231,8 @@ public class Sprint5Test {
     void testMixedMediaReportMultipleItemsSameType() {
         // Borrow multiple books
         Book book2 = new Book("Book 2", "Author 2", "ISBN456");
-        Loan loan1 = borrowingService.borrowBook(user, book, borrowDate);
-        Loan loan2 = borrowingService.borrowBook(user, book2, borrowDate);
+        borrowingService.borrowBook(user, book, borrowDate);
+        borrowingService.borrowBook(user, book2, borrowDate);
         
         LocalDate currentDate = borrowDate.plusDays(30); // Both 2 days overdue
         

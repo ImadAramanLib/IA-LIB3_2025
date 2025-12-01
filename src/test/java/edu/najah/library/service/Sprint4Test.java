@@ -24,7 +24,6 @@ public class Sprint4Test {
     
     private BorrowingService borrowingService;
     private UserService userService;
-    private OverdueDetectionService overdueDetectionService;
     
     private User user1;
     private User user2;
@@ -35,7 +34,6 @@ public class Sprint4Test {
     @BeforeEach
     void setUp() {
         borrowingService = new BorrowingService();
-        overdueDetectionService = new OverdueDetectionService(borrowingService);
         userService = new UserService(borrowingService);
         
         // Create test users

@@ -29,9 +29,6 @@ public class DatabaseTest {
         logger.info("User: " + USER);
         
         try {
-            logger.info("Loading PostgreSQL driver...");
-            Class.forName("org.postgresql.Driver");
-            
             logger.info("Attempting connection (timeout 10 seconds)...");
             
             // Set connection timeout

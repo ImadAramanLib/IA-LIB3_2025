@@ -68,7 +68,6 @@ public class UserService {
         }
         
         // Check if user has active loans
-        List<User> allUsers = getUsers();
         if (borrowingService.getActiveLoans(user).size() > 0) {
             return false;
         }

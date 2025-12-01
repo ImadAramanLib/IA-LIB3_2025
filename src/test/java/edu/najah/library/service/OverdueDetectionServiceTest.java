@@ -138,9 +138,9 @@ public class OverdueDetectionServiceTest {
     
     @Test
     void testMultipleOverdueLoans() {
-        Loan loan1 = borrowingService.borrowBook(user, book, borrowDate);
+        borrowingService.borrowBook(user, book, borrowDate);
         Book book2 = new Book("Another Book", "Another Author", "ISBN456");
-        Loan loan2 = borrowingService.borrowBook(user, book2, borrowDate);
+        borrowingService.borrowBook(user, book2, borrowDate);
         
         LocalDate currentDate = borrowDate.plusDays(30);
         List<Loan> overdueLoans = overdueService.getOverdueLoans(currentDate);
