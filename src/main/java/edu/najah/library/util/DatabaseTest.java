@@ -41,35 +41,34 @@ public class DatabaseTest {
             props.setProperty("connectTimeout", "10");
             props.setProperty("socketTimeout", "10");
             
-            Connection conn = DriverManager.getConnection(URL, props);
-            
-            logger.info("✅ CONNECTION SUCCESSFUL!");
-            
-            // Test query
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT version()");
-            if (rs.next()) {
-                logger.info("PostgreSQL Version: " + rs.getString(1));
+            // Use try-with-resources to ensure Connection is properly closed
+            try (Connection conn = DriverManager.getConnection(URL, props)) {
+                logger.info("✅ CONNECTION SUCCESSFUL!");
+                
+                // Test query
+                try (Statement stmt = conn.createStatement();
+                     ResultSet rs = stmt.executeQuery("SELECT version()")) {
+                    if (rs.next()) {
+                        logger.info("PostgreSQL Version: " + rs.getString(1));
+                    }
+                }
+                
+                // Create admins table if not exists
+                logger.info("Creating 'admins' table if not exists...");
+                try (Statement stmt = conn.createStatement()) {
+                    stmt.executeUpdate(
+                        "CREATE TABLE IF NOT EXISTS admins (" +
+                        "  id SERIAL PRIMARY KEY," +
+                        "  username VARCHAR(255) UNIQUE NOT NULL," +
+                        "  password VARCHAR(255) NOT NULL," +
+                        "  email VARCHAR(255)" +
+                        ")"
+                    );
+                    logger.info("✅ Table created/verified!");
+                }
+                
+                logger.info("✅ ALL TESTS PASSED - Database is working!");
             }
-            rs.close();
-            stmt.close();
-            
-            // Create admins table if not exists
-            logger.info("Creating 'admins' table if not exists...");
-            stmt = conn.createStatement();
-            stmt.executeUpdate(
-                "CREATE TABLE IF NOT EXISTS admins (" +
-                "  id SERIAL PRIMARY KEY," +
-                "  username VARCHAR(255) UNIQUE NOT NULL," +
-                "  password VARCHAR(255) NOT NULL," +
-                "  email VARCHAR(255)" +
-                ")"
-            );
-            logger.info("✅ Table created/verified!");
-            stmt.close();
-            
-            conn.close();
-            logger.info("✅ ALL TESTS PASSED - Database is working!");
             
         } catch (Exception e) {
             logger.severe("❌ CONNECTION FAILED!");

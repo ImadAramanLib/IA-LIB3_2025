@@ -127,14 +127,16 @@ public class LibraryGUI extends JFrame {
     private void initializeDatabase() {
         try {
             entityManager = DatabaseConfig.createEntityManager();
-            if (entityManager != null) {
-                databaseService = new DatabaseService(entityManager);
-            } else {
+            // Check if EntityManager creation failed (can happen if database initialization fails)
+            if (entityManager == null) {
                 JOptionPane.showMessageDialog(this, 
                     "Database connection failed. Running in offline mode.\n" +
                     "Please set NEON_DB_URL, NEON_DB_USER, NEON_DB_PASSWORD environment variables.",
                     "Database Warning", JOptionPane.WARNING_MESSAGE);
+                return;
             }
+            // EntityManager is not null, proceed with initialization
+            databaseService = new DatabaseService(entityManager);
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, 
