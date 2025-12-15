@@ -79,6 +79,12 @@ public class DatabaseConfig {
             
             // Initialize the EntityManagerFactory from persistence.xml with properties
             emf = Persistence.createEntityManagerFactory("NeonLibraryPU", properties);
+            
+            // Trigger schema update by creating and closing a temporary EntityManager
+            // This ensures that Hibernate's hbm2ddl.auto=update runs before any queries
+            EntityManager tempEm = emf.createEntityManager();
+            tempEm.close();
+            
             logger.info("✅ Database connection successful!");
             return true;
         } catch (Exception e) {
