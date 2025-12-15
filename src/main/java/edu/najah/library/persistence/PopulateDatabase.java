@@ -1,5 +1,6 @@
 package edu.najah.library.persistence;
 
+import edu.najah.library.config.DatabaseConfig;
 import edu.najah.library.domain.Admin;
 import edu.najah.library.domain.User;
 import jakarta.persistence.EntityManager;

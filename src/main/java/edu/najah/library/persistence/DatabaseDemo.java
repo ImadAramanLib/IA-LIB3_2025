@@ -1,5 +1,6 @@
 package edu.najah.library.persistence;
 
+import edu.najah.library.config.DatabaseConfig;
 import edu.najah.library.domain.Book;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
